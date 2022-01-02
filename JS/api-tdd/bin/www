@@ -3,10 +3,11 @@
 /**
  * Module dependencies.
  */
-
+// var serverTerminator = require("../helper/terminator")
 var app = require('../app');
 var debug = require('debug')('api-tdd:server');
 var http = require('http');
+const terminateServer = require('../helper/terminateServer');
 
 /**
  * Get port from environment and store in Express.
@@ -29,6 +30,9 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+// serverTerminator(server)
+
+terminateServer(process)
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -88,3 +92,4 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
