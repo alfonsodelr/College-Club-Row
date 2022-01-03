@@ -1,41 +1,15 @@
+/////////Postgress helpful tips///////////////////////////
+//start db: C:\Program Files\PostgreSQL\14>postgres -D data
+// \l: show all db
+// \c changelab:    connect to changelab db
+// \dt:  list all tables
+// SELECT * FROM clients
+//////////////////////////////////////////////////////////
 const DB = require('./db.js')
-const modelDefiner = require('../db/model/index')
-const db = new DB();
-const connection = db.init();
-modelDefiner(connection);
-db.isConnected(connection)
+var ClubModle = require("../db/model/club.js")
 
-
-
-
-// const TABLES = {
-//     CLUBS: "clubs"
-// };
-
-
-
-
-// const Club = sequelize.define(TABLES.CLUBS, {
-//     ids: {
-//         type: DataTypes.STRING(10),
-//         allowNull: false,
-//     }
-// });
-
-// const Club2 = sequelize.define("er", {
-//     ids: {
-//         type: DataTypes.STRING(10),
-//         allowNull: false,
-//     }
-// });
-
-// const Club3 = sequelize.define("sen", {
-//     ids: {
-//         type: DataTypes.STRING(10),
-//         allowNull: false,
-//     }
-// });
-
-
-
-// module.exports = { sequelize, Club };
+const newDB = new DB();
+const connection = newDB.init();
+var club = ClubModle(connection);
+newDB.isConnected(connection)
+module.exports = { connection, club };

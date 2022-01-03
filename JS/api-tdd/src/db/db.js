@@ -1,16 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize } = require('sequelize');
 const config = require('../../config.js');
-/////////Postgress helpful tips///////////////////////////
-//start db: C:\Program Files\PostgreSQL\14>postgres -D data
-// \l: show all db
-// \c changelab:    connect to changelab db
-// \dt:  list all tables
-// SELECT * FROM clients
-//////////////////////////////////////////////////////////
-
-// with db.init() initializes database and setup
-
-//@dependency: Sequelize
 function DB() {
     const { host, user: userName, password, name: dbName, dialect, port } = config.db;
     this.getCred = function () {
@@ -42,14 +31,6 @@ DB.prototype.isConnected = function (connection) {
         .catch(function (err) {
             console.error('DB Unable to connect to the database:', err);
         });
-}
-
-DB.prototype.createDatabase = function (connection) {
-    // const { dbName } = this.getCred();
-    const { host, userName, password, dialect, dbName, port } = this.getCred();
-    connection.queryInterface.createDatabase('clubs')
-        .catch(function (e) { if (!e.toString().includes("already exists")) console.error("Error creating database: " + e) })
-    connection.connectionManager.config.database = 'clubs'
 }
 
 DB.prototype.createDB = function (connection, dbName) {

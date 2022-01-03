@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const modelName = 'club'
+
 module.exports = (sequelize) => {
-	sequelize.define(modelName, {
+	const Club = sequelize.define("Club", {
 		id: {
 			allowNull: false,
 			autoIncrement: true,
@@ -21,4 +21,5 @@ module.exports = (sequelize) => {
 		// },
 
 	});
+	return Club
 };

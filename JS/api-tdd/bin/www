@@ -4,10 +4,10 @@
  * Module dependencies.
  */
 // var serverTerminator = require("../helper/terminator")
-var app = require('../app');
+var app = require('../src/app');
 var debug = require('debug')('api-tdd:server');
 var http = require('http');
-const terminateServer = require('../helper/terminateServer');
+const terminateServer = require('../src/helper/terminateServer');
 
 /**
  * Get port from environment and store in Express.
