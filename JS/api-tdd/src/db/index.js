@@ -10,6 +10,6 @@ var ClubModle = require("../db/model/club.js")
 
 const newDB = new DB();
 const connection = newDB.init();
-var club = ClubModle(connection);
+var Club = ClubModle(connection);
 newDB.isConnected(connection)
-module.exports = { connection, club };
+module.exports = { connection, Club };
