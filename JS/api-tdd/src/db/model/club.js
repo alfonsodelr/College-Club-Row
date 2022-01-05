@@ -3,10 +3,9 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
 	const Club = sequelize.define("Club", {
 		id: {
-			allowNull: false,
-			autoIncrement: true,
+			type: DataTypes.UUID,
 			primaryKey: true,
-			type: DataTypes.INTEGER
+			defaultValue: DataTypes.UUIDV4,
 		},
 		name: {
 			allowNull: false,

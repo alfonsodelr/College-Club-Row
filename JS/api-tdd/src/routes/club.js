@@ -5,12 +5,7 @@ const clubController = require("../controllers/club.js")
 
 router.get('/', clubController.getClub);
 
-router.post('/', async function (req, res, next) {
-    // let newClub = await Club.create({
-    //     ids: "1", name: "ags"
-    // });
-    res.status(200).send(JSON.stringify({ a: "you posted a club" }))
-});
+router.post('/', clubController.createClub);
 module.exports = router;
 
 

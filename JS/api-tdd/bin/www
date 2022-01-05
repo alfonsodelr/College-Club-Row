@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+const { appPort } = require('../config').microPort;
+
 
 /**
  * Module dependencies.
@@ -13,7 +15,7 @@ const terminateServer = require('../src/helper/terminateServer');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(appPort || '3000');
 app.set('port', port);
 
 /**
@@ -32,7 +34,7 @@ server.on('listening', onListening);
 
 // serverTerminator(server)
 
-terminateServer(process)
+// terminateServer(process)
 /**
  * Normalize a port into a number, string, or false.
  */
