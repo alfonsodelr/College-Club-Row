@@ -1,45 +1,81 @@
-const request = require("supertest")
-const app = require('../src/app')
-const { Club } = require('../src/db/index')
+const axios = require('axios').default;
+const { appPort } = require('../config.js').microPort
+const baseUrl = `http://127.0.0.1:${appPort}`
+const { makeid } = require('./util.js')
+const { Club } = require('../src/db/index.js');
 
 
-let clubData1 = { name: "AGS" }
-const regexUUID = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+beforeEach(() => {
+    jest.useFakeTimers()
+    jest.setTimeout(100000)
+})
+afterEach(() => {
+    jest.clearAllTimers()
+});
 
+describe('Testing creating a club', () => {
+    const name = makeid(5);
+    test('should create a club, and get club name in the response', async () => {
+        let response = await axios.post(`${baseUrl}/club`, { name })
+        expect(response.status).toBe(200)
+        expect(response.data.newClub.name).toBe(name)
+    });
 
-describe('create a club', () => {
-    test('should able to post a club', async () => {
+    test('should get the club and respond with id and name', async () => {
+        let response = await axios.get(`${baseUrl}/club`, { data: { name: name } })
+        expect.assertions(3)
+        expect(response.status).toBe(200);
+        ids = response.data.clubExist.id;
+        expect(response.data.clubExist.id).toBeDefined()
+        expect(response.data.clubExist.name).toBeDefined()
+    });
 
-        await request(app)
-            .post('/club')
-            .expect('Content-Type', /json/)
-            .send(clubData1)
-            .expect(200)
-            .expect((res) => {
-                id = res.body.uuid;
-                expect(regexUUID.test(res.body.id)).toBe(true)
-            })
+    test('GET /club/all: will return total clubs', async () => {
+        let numberOfClubs = await Club.count();
+        let response = await axios.get(`${baseUrl}/club/all`)
+        expect(response.status).toBe(200);
+
+        let numberOfResponse = response.data.clubs.length
+        expect(numberOfResponse).toEqual(numberOfClubs)
+        expect.assertions(2)
+    });
+
+    test("should update a club info", async () => {
+        let newName = makeid(6);
+        let response = await axios.get(`${baseUrl}/club`, { data: { name: name } })
+        let existingID = response.data.clubExist.id;
+        let responsePatch = await axios.patch(`${baseUrl}/club`, { id: existingID, data: { name: newName } })
+        expect(responsePatch.status).toBe(200);
+        expect(responsePatch.data.name).toEqual(newName);
+
+        expect.assertions(2)
     })
 
-    // test('should be in the database', async () => {
-    //     let clubExist = await Club.findOne({
-    //         raw: true,
-    //         where: { id: id },
-    //     });
+    test("should delete a club info", async () => {
+        let name = makeid(7);
+        let responseCreate = await axios.post(`${baseUrl}/club`, { name });
+        let newId = responseCreate.data.newClub.id;
 
+        let responseDelete = await axios.delete(`${baseUrl}/club`, { data: { id: newId } })
+        expect(responseDelete.status).toBe(200);
+        expect(responseDelete.data.id).toBe(newId);
 
-    // })
+        expect.assertions(2)
+    })
+
+    test("should handles wrong paramerter", async () => {
+        //get
+
+        //post
+
+        //delete
+
+        //update
+    })
+
+    test.todo("should return 422 for missing parameter")
+
 })
 
-// it("should get a club", async function () {
-//     return await request(app)
-//         .get('/club')
-//         .expect('Content-Type', /json/)
-//         .expect(200)
 
-// })
-
-
-it("404 for undefined routes ", async function () {
-    return await request(app).get('/sldfkj').expect(404)
-})
+//set this.data in beforeach() function to have global var

@@ -1,28 +1,39 @@
 {
-  "name": "api-tdd",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www",
-    "test": "jest --watchAll --detectOpenHandles --silent",
-    "t": "jest --silent"
-  },
-  "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "jest": "^27.4.6",
-    "morgan": "~1.9.1",
-    "pg": "^8.7.1",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^7.0.0-alpha.4",
-    "uuid": "^8.3.2"
-  },
-  "main": "app.js",
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "supertest": "^6.1.6"
-  }
+    "name": "api-tdd",
+    "jest": {
+        "verbose": true,
+        "moduleDirectories": [
+            "node_modules",
+            "src"
+        ]
+    },
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "nodemon src/app.js",
+        "dev": "node src/app.js",
+        "test": "jest --watchAll --detectOpenHandles --silent",
+        "t": "jest --silent"
+    },
+    "dependencies": {
+        "axios": "^0.24.0",
+        "body-parser": "^1.19.1",
+        "cookie-parser": "~1.4.4",
+        "debug": "~2.6.9",
+        "express": "^4.17.2",
+        "jest": "^27.4.6",
+        "morgan": "~1.9.1",
+        "pg": "^8.7.1",
+        "pg-hstore": "^2.3.4",
+        "sequelize": "^7.0.0-alpha.4",
+        "uuid": "^8.3.2"
+    },
+    "main": "app.js",
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "faker": "^6.6.6",
+        "nodemon": "^2.0.15"
+    }
 }

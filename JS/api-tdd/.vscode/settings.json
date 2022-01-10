@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": true,
+    "editor.suggest.localityBonus": true,
+    "editor.suggest.preview": true,
+    "editor.suggest.showStatusBar": true,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 601000,
+    "files.insertFinalNewline": true
+}
