@@ -1,3 +1,6 @@
+This auth structure was a modified version of repo : https://github.com/nextauthjs/next-auth/issues 
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

@@ -2,12 +2,13 @@ var express = require('express');
 var bodyParser = require('body-parser')
 var path = require('path');
 const { appPort } = require('../config.js').microPort;
+const { url: appUrl } = require('../config.js').frontApp;
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var clubRouter = require("./routes/club.js")
 const { sequelize } = require('./db/index.js')
-
+const cors = require("cors");
 var app = express()
 
 // // parse application/x-www-form-urlencoded
@@ -36,6 +37,12 @@ async function init() {
     });
 }
 
+app.use(cors({
+    origin: `${appUrl}`,
+    // allowedHeaders: ['Content-Type', 'Set-Cookie'],
+    // credentials: true,
+    // methods: ['POST']
+}))
 
 var app = express();
 app.use(logger('dev'));
