@@ -1,0 +1,24 @@
+{
+  "name": "next-auth-example",
+  "version": "0.0.0",
+  "private": true,
+  "description": "An example project for NextAuth.js",
+  "bugs": {
+    "url": "https://github.com/nextauthjs/next-auth/issues"
+  },
+  "main": "",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^12.0.7",
+    "next-auth": "latest",
+    "nodemailer": "^6.6.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
