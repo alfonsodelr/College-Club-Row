@@ -1,6 +1,27 @@
 import { SessionProvider, useSession } from 'next-auth/react'
 import './styles.css'
 import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+//------MUI THEME-----------
+const themeOptions = {
+  palette: {
+    primary: {
+      main: '#673ab7',
+      light: '#9a67ea',
+      dark: '#320b86',
+    },
+    secondary: {
+      main: '#2196f3',
+      light: '#6ec6ff',
+      dark: '#0069c0',
+    },
+  },
+};
+const customTheme = createTheme(themeOptions);
+
+
+
 // Use of the <SessionProvider> is now mandatory to allow components that call
 // `useSession()` anywhere in your application to access the `session` object.
 export default function App({
@@ -8,19 +29,22 @@ export default function App({
   pageProps: { session, ...pageProps },
 }) {
   return (
-    <SessionProvider
-      options={{
-        staleTime: 0, refetchInterval: 0
-      }}
-      session={session}>
+    <SessionProvider options={{ staleTime: 0, refetchInterval: 0 }} session={session}>
       <CssBaseline />
-      {Component.auth ? (
-        <Auth>
+
+
+      <ThemeProvider theme={customTheme}>
+        {Component.auth ? (
+          <Auth>
+            <Component {...pageProps} />
+          </Auth>
+        ) : (
           <Component {...pageProps} />
-        </Auth>
-      ) : (
-        <Component {...pageProps} />
-      )}
+        )}
+      </ThemeProvider>
+
+
+
     </SessionProvider>
   )
 }

@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
 function Index() {
     const labelRef = useRef();
     const tagRef = useRef();
@@ -35,6 +37,11 @@ function Index() {
             type = 'text';
             min = 1;
             max = 200;
+        } else if (tagType === 'paragraph') {
+            tag = 'textarea';
+            type = 'text';
+            min = 1;
+            max = 500;
         }
         return { tag, type, max, min, id, classes, placeholder, required, values, description, tagType }
     }
@@ -77,19 +84,33 @@ function Index() {
                     <p>Required</p>
                     <Switch inputRef={requiredRef} />
                 </div>
-                <Button onClick={addTagHandler} sx={{ float: 'right' }} variant='contained' size="medium">Add</Button>
-                {/* <Button variant="outlined" startIcon={<DeleteIcon />}></Button> */}
+                <Button onClick={addTagHandler} color='primary' variant='contained'>Add</Button>
             </div>
-            <div className={$.columnFlex}>
-                {
-                    tagArr.map((e, key) => {
-                        if (e.tag === 'input' && e.tagType === 'short-answer')
-                            return <p key={key}> {e.tagType}</p>
-                    })
-                }
-                {/* <Button variant="outlined" startIcon={<DeleteIcon />}></Button> */}
-            </div>
-        </div>
+            {
+                tagArr.map((e, key) => {
+                    if (e.tagType === 'short-answer') {
+                        return (
+                            <Box sx={{ boxShadow: 3 }} className={$.containerFlex} >
+                                <TextField multiline={true} fullWidth id="standard-basic-input" placeholder={e.description} label={e.label} variant="standard" required={e.required} />
+                                <div className={$.divider}></div>
+                                <IconButton>
+                                    <DeleteIcon className={$.deleteIcon} />
+                                </IconButton>
+                            </Box>)
+                    } else if (e.tagType === 'paragraph') {
+                        return (
+                            <Box sx={{ boxShadow: 3 }} className={$.containerFlex} >
+                                <TextField multiline={true} fullWidth id="standard-basic-textarea" placeholder={e.description} label={e.label} variant="outlined" required={e.required} />
+                                <div className={$.divider}></div>
+                                <IconButton>
+                                    <DeleteIcon className={$.deleteIcon} />
+                                </IconButton>
+                            </Box>)
+                    }
+
+                })
+            }
+        </div >
     )
 }
 
