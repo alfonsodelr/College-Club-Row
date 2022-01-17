@@ -1,4 +1,4 @@
-import { React, useRef } from 'react'
+import { React, useRef, useState, useEffect } from 'react'
 import CustomInput from './customInput'
 import $ from './index.module.scss'
 import Input from '../Input'
@@ -7,31 +7,54 @@ import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/Delete';
 function Index() {
-    const labelRef = useRef('');
-    const tagRef = useRef('');
-    const descriptionRef = useRef('');
-    function getTagType(tagType) {
-        var tag = "", type = '', max = '', min = '', id = '', classes = '', placeholder = '', required = '', values = '', ;
+    const labelRef = useRef();
+    const tagRef = useRef();
+    const requiredRef = useRef()
+    const descriptionRef = useRef();
+    const [tagArr, setTagArr] = useState([])
 
+    useEffect(() => {
+        console.log("use effect")
+        //reset refs
+        labelRef.current.value = '';
+        tagRef.current.value = "short-answer";
+        requiredRef.current.value = '';
+        descriptionRef.current.value = '';
+        return () => {
+
+        }
+    }, [tagArr])
+
+
+
+    function getTag(tagType) {
+        var tag = "", label = '', type = '', max = '', min = '', id = '', tagType = tagType,
+            classes = '', placeholder = '', required = '', values = '', description = '';
         if (tagType === "short-answer") {
             tag = 'input';
             type = 'text';
             min = 1;
             max = 200;
         }
-
-        return { tag, type, max, min, id, classes, placeholder, required, values }
+        return { tag, type, max, min, id, classes, placeholder, required, values, description, tagType }
     }
+
     const addTagHandler = e => {
+        console.log("handler")
+
         const labelText = labelRef.current.value;
         const tagType = tagRef.current.value;
         const description = descriptionRef.current.value;
+        const required = requiredRef.current.checked;
+        const tag = getTag(tagType);
+        tag.description = description;
+        tag.label = labelText;
+        tag.required = required;
+        setTagArr(preState => [...preState, tag]);
 
 
-        // { tag: "select", label: "Gender", type: "text", id: "gender", placeholder: "gender", required: true, regex: "", options: ["female", 'male', 'other', 'decline to state'] },
-
-        console.log({ tag: tagType === "short-answer", labelText, description })
     }
+    console.log(tagArr)
     return (
         <div className={$.formWrap}>
             <div className={$.columnFlex}>
@@ -50,12 +73,20 @@ function Index() {
                     </div>
                 </div>
                 <TextField inputRef={descriptionRef} id="standard-basic" label="Short Description (optioanl)" variant="standard" />
-
                 <div className={$.requiredSwitch}>
                     <p>Required</p>
-                    <Switch />
+                    <Switch inputRef={requiredRef} />
                 </div>
                 <Button onClick={addTagHandler} sx={{ float: 'right' }} variant='contained' size="medium">Add</Button>
+                {/* <Button variant="outlined" startIcon={<DeleteIcon />}></Button> */}
+            </div>
+            <div className={$.columnFlex}>
+                {
+                    tagArr.map((e, key) => {
+                        if (e.tag === 'input' && e.tagType === 'short-answer')
+                            return <p key={key}> {e.tagType}</p>
+                    })
+                }
                 {/* <Button variant="outlined" startIcon={<DeleteIcon />}></Button> */}
             </div>
         </div>
