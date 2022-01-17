@@ -1,0 +1,132 @@
+$color-primary: #673ab7;
+$color-primary_light: #9a67ea;
+$color-primary_dark: #320b86;
+
+$color-secondary: #2196f3;
+$color-secondary_light: #6ec6ff;
+$color-secondary_dark: #0069c0;
+
+$primary-text-color: #ffffff;
+$secondary-text-color: #000000;
+
+
+
+.formWrap{
+    background-color: #ede7f6;  //
+    position: relative;
+    height: 100%;
+    padding:30px 0;
+    .columnFlex{
+        margin:0 auto;
+        display: flex;
+        flex-flow:column wrap;
+        justify-content: space-around;
+        align-content: center;
+        column-gap: 20px;
+        width: 750px;
+        height: 100%;
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius:5px;
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+        &:hover{
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+        .formElement{
+            display: flex;
+            justify-content: space-around;
+            align-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+           
+        }
+
+    }
+}
+
+.requiredSwitch{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Custom Select wrapper */
+.select {
+    position: relative;
+    display: flex;
+    width: 20em;
+    height: 3em;
+    border-radius: .25em;
+    overflow: hidden;
+
+    select {
+        font-size:18px;
+        font-weight:normal;
+        /* Reset Select */
+        appearance: none;
+        outline: 0;
+        border: 0;
+        box-shadow: none;
+        /* Personalize */
+        flex: 1;
+        background-color: blanchedalmond;
+        padding: 0 1em;
+        background-color: var(--darkgray);
+        background-image: none;
+        cursor: pointer;
+
+        /* Remove IE arrow */
+        &::-ms-expand {
+            display: none;
+        }    
+    }
+    &::after {
+        content: '\25BC';
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 1em;
+        background-color: $color-secondary_light;
+        transition: .25s all ease;
+        pointer-events: none;
+        }
+    
+}
+
+
+//-------------------------------------------------------------media starts--------------------------------------------
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+/* Styles */
+.formWrap{width: 100%;}
+}
+
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+/* Styles */
+.formWrap{
+    width: 90vw;
+}
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+//-------------------------------------------------------------media ends--------------------------------------------
+
+

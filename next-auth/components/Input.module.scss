@@ -1,0 +1,105 @@
+
+$color-primary: #673ab7;
+$color-primary_light: #9a67ea;
+$color-primary_dark: #320b86;
+
+$color-secondary: #2196f3;
+$color-secondary_light: #6ec6ff;
+$color-secondary_dark: #0069c0;
+
+$primary-text-color: #ffffff;
+$secondary-text-color: #000000;
+
+/* form starting stylings ------------------------------- */
+.group 			  { 
+    position:relative; 
+
+    input{
+    font-size:18px;
+    padding:10px 10px 10px 5px;
+    display:block;
+    width:300px;
+    border:none;
+    border-bottom:1px solid #757575;
+    }
+    input:focus 		{ outline:none; }
+    /* active state */
+    input:focus ~ label, input:valid ~ label{
+        top:-20px;
+        font-size:14px;
+        color:#5264AE;
+    }
+    /* active state */
+    input:focus ~ .bar:before, input:focus ~ .bar:after{
+    width:50%;
+    }
+    
+    /* active state */
+    input:focus ~ .highlight {
+        -webkit-animation:inputHighlighter 0.3s ease;
+        -moz-animation:inputHighlighter 0.3s ease;
+        animation:inputHighlighter 0.3s ease;
+    }
+    /* LABEL ======================================= */
+    label {
+        color:#999; 
+        font-size:18px;
+        font-weight:normal;
+        position:absolute;
+        pointer-events:none;
+        left:5px;
+        top:10px;
+        transition:0.2s ease all; 
+        -moz-transition:0.2s ease all; 
+        -webkit-transition:0.2s ease all;
+    }
+
+    /* BOTTOM BARS ================================= */
+    .bar 	{ position:relative; display:block; width:300px; }
+    .bar:before, .bar:after 	{
+    content:'';
+    height:2px; 
+    width:0;
+    bottom:1px; 
+    position:absolute;
+    background:$color-secondary_dark; 
+    transition:0.2s ease all; 
+    -moz-transition:0.2s ease all; 
+    -webkit-transition:0.2s ease all;
+    }
+    .bar:before {
+    left:50%;
+    }
+    .bar:after {
+    right:50%; 
+    }
+
+    /* HIGHLIGHTER ================================== */
+    .highlight {
+    position:absolute;
+    height:60%; 
+    width:100px; 
+    top:25%; 
+    left:0;
+    pointer-events:none;
+    opacity:0.5;
+    }
+
+}
+
+
+
+
+/* ANIMATIONS ================ */
+@-webkit-keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+@-moz-keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}
+@keyframes inputHighlighter {
+	from { background:#5264AE; }
+  to 	{ width:0; background:transparent; }
+}

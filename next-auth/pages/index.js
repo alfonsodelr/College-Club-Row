@@ -1,12 +1,11 @@
-import Layout from '../components/layouts/layout'
-
+import Layout from '../components/layouts/ClubHeader'
+import Wave from '../components/WaveHeader'
+import FormGenerator from '../components/FormGenerator/Index.jsx'
 export default function Page() {
   return (
-    <Layout>
-      <h1>NextAuth.js Example</h1>
-      <p>
-        This is an example site to demonstrate how to use <a href={`https://next-auth.js.org`}>NextAuth.js</a> for authentication.
-      </p>
-    </Layout>
+    <>
+      <Wave headerTitle="Form Generator" />
+      <FormGenerator />
+    </>
   )
 }

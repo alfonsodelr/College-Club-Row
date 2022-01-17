@@ -1,6 +1,6 @@
 import { SessionProvider, useSession } from 'next-auth/react'
 import './styles.css'
-
+import CssBaseline from '@mui/material/CssBaseline';
 // Use of the <SessionProvider> is now mandatory to allow components that call
 // `useSession()` anywhere in your application to access the `session` object.
 export default function App({
@@ -13,7 +13,7 @@ export default function App({
         staleTime: 0, refetchInterval: 0
       }}
       session={session}>
-
+      <CssBaseline />
       {Component.auth ? (
         <Auth>
           <Component {...pageProps} />
