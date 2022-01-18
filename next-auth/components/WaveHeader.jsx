@@ -18,10 +18,10 @@ export default function Wave({ headerTitle = "" }) {
   const { data: session, status } = useSession()
   const headerImageHeight = 540;
 
-  useEffect(() => {
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  // useEffect(() => {
+  //   window.addEventListener('scroll', onScroll)
+  //   return () => window.removeEventListener('scroll', onScroll)
+  // }, [])
 
 
   const onScroll = () => {

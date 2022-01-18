@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import TextField from '@mui/material/TextField';  
+import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 function FormGenerator() {
     const [tagType, setTagType] = useState("short-answer")

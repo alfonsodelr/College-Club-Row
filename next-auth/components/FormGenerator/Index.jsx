@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 function Index() {
     const labelRef = useRef();
@@ -15,19 +15,30 @@ function Index() {
     const descriptionRef = useRef();
     const [tagArr, setTagArr] = useState([])
 
+
+    function varNameGenerator(str, timeStemp = true, time = Date.now()) {
+        var varname = str.replace(/[^a-zA-Z0-9]/g, "");
+        if (!timeStemp)
+            return varname;
+        return (varname + time);
+    }
+
+    function deleteTagHandler(e) {
+        const targetId = e.target.id;
+        setTagArr(tagArr.filter(item => item.id !== targetId));
+    }
+
     useEffect(() => {
-        console.log("use effect")
         //reset refs
         labelRef.current.value = '';
         tagRef.current.value = "short-answer";
         requiredRef.current.value = '';
         descriptionRef.current.value = '';
         return () => {
-
         }
     }, [tagArr])
 
-
+    console.log(tagArr)
 
     function getTag(tagType) {
         var tag = "", label = '', type = '', max = '', min = '', id = '', tagType = tagType,
@@ -47,8 +58,6 @@ function Index() {
     }
 
     const addTagHandler = e => {
-        console.log("handler")
-
         const labelText = labelRef.current.value;
         const tagType = tagRef.current.value;
         const description = descriptionRef.current.value;
@@ -57,11 +66,11 @@ function Index() {
         tag.description = description;
         tag.label = labelText;
         tag.required = required;
+        tag.id = varNameGenerator(labelText);
         setTagArr(preState => [...preState, tag]);
 
 
     }
-    console.log(tagArr)
     return (
         <div className={$.formWrap}>
             <div className={$.columnFlex}>
@@ -86,25 +95,27 @@ function Index() {
                 </div>
                 <Button onClick={addTagHandler} color='primary' variant='contained'>Add</Button>
             </div>
+
+            {/* -----------------------form display area ----------------------- */}
             {
-                tagArr.map((e, key) => {
+                tagArr.map((e) => {
                     if (e.tagType === 'short-answer') {
                         return (
-                            <Box sx={{ boxShadow: 3 }} className={$.containerFlex} >
-                                <TextField multiline={true} fullWidth id="standard-basic-input" placeholder={e.description} label={e.label} variant="standard" required={e.required} />
+                            <Box key={e.id} sx={{ boxShadow: 3 }} className={$.containerFlex} >
+                                <TextField multiline={false} fullWidth id={e.id} placeholder={e.description} label={e.label} variant="standard" required={e.required} />
                                 <div className={$.divider}></div>
-                                <IconButton>
-                                    <DeleteIcon className={$.deleteIcon} />
-                                </IconButton>
+                                <Button onClick={deleteTagHandler} id={e.id} variant="outlined" startIcon={<DeleteIcon />}>
+                                    Delete
+                                </Button>
                             </Box>)
                     } else if (e.tagType === 'paragraph') {
                         return (
-                            <Box sx={{ boxShadow: 3 }} className={$.containerFlex} >
-                                <TextField multiline={true} fullWidth id="standard-basic-textarea" placeholder={e.description} label={e.label} variant="outlined" required={e.required} />
+                            <Box key={e.id} sx={{ boxShadow: 3 }} className={$.containerFlex} >
+                                <TextField multiline={true} fullWidth id={e.id} placeholder={e.description} label={e.label} variant="outlined" required={e.required} />
                                 <div className={$.divider}></div>
-                                <IconButton>
-                                    <DeleteIcon className={$.deleteIcon} />
-                                </IconButton>
+                                <Button onClick={deleteTagHandler} id={e.id} variant="outlined" startIcon={<DeleteIcon />}>
+                                    Delete
+                                </Button>
                             </Box>)
                     }
 
