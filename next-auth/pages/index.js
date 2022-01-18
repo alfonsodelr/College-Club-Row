@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 
 export default function Page() {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+    <Box sx={{ backgroundColor: 'red', display: 'flex', flexDirection: 'column', width: '100%' }}>
       <Wave headerTitle="Form Generator" />
       <FormGenerator />
     </Box>

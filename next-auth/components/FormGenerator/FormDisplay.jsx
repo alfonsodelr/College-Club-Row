@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import $ from './Index.module.scss'
 import RadioButtonsGroup_Custom from './RadioButtonsGroup_Custom';
 import CheckboxGroup from './CheckboxGroup';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 function FormDisplay({ tagArr, deleteTagHandler }) {
 
@@ -47,6 +48,28 @@ function FormDisplay({ tagArr, deleteTagHandler }) {
                                     Delete
                                 </Button>
                             </Box>)
+                    } else if (e.tagType === 'file-upload') {
+                        return (
+                            <Box key={e.id} sx={{ flexDirection: 'column', boxShadow: 3 }} className={$.containerFlex} >
+                                < h3 > {e.label}</h3 >
+                                <Button
+                                    varian='default'
+                                    component="label"
+                                    startIcon={<CloudUploadIcon color='info' />}>
+                                    Upload File
+                                    <input
+                                        type="file"
+                                        hidden
+                                    />
+                                </Button>
+
+                                <Button onClick={deleteTagHandler} id={e.id} variant="outlined" startIcon={<DeleteIcon />}>
+                                    Delete
+                                </Button>
+                            </Box>)
+
+
+
                     }
 
                 })
@@ -56,3 +79,4 @@ function FormDisplay({ tagArr, deleteTagHandler }) {
 }
 
 export default FormDisplay
+

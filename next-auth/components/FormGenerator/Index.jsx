@@ -9,11 +9,15 @@ import FormDisplay from './FormDisplay';
 import InputAdornment from '@mui/material/InputAdornment';
 import Checkbox from '@mui/material/Checkbox';
 import CheckboxGroup from './CheckboxGroup';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Toolbar from '@mui/material/Toolbar';
+
+
 function Index() {
-    const labelRef = useRef('');
     const checkboxRef = useRef('')
     const [labelText, setLabelText] = useState('')
-    const tagRef = useRef();
     const multipleChoiceOptionRef = useRef('');
     const requiredRef = useRef()
     const descriptionRef = useRef();
@@ -40,7 +44,6 @@ function Index() {
     }
     function checkboxDeleteHandler(e) {
         const targetValue = e;
-        console.log("delete handler isn on ")
         setCheckboxArr(checkboxArr.filter(item => item.value !== targetValue))
     }
 
@@ -56,7 +59,7 @@ function Index() {
         }
     }, [tagArr])
 
-    console.log(tagArr)
+
 
     function getTag(tagType) {
         var tag = "", label = '', type = '', max = '', min = '', id = '', tagType = tagType,
@@ -80,6 +83,9 @@ function Index() {
             tag = 'input';
             type = 'checkbox';
             values = checkboxArr;
+        } else if (tagType === 'file-upload') {
+            tag = 'input';
+            type = 'file';
         }
         return { tag, type, max, min, id, classes, placeholder, required, values, description, tagType }
     }
@@ -110,11 +116,19 @@ function Index() {
         checkboxRef.current.value = '';
     }
 
+
+    const generateFormHandler = () => {
+        console.log(tagArr)
+    }
+
     return (
         <div className={$.formWrap}>
+            <Toolbar>
+                <Button onClick={generateFormHandler} sx={{ ml: 'auto' }} color='primary' variant='contained'>Generate</Button>
+            </Toolbar>
             <div className={$.columnFlex}>
-                <div className={$.formElement}>
-                    <TextField value={labelText} onChange={e => setLabelText(e.target.value)} id="tagLabel" label="Label" variant="standard" />
+                <form className={$.formElement}>
+                    <TextField required value={labelText} onChange={e => setLabelText(e.target.value)} id="tagLabel" label="Label" variant="standard" />
                     <div className={$.select} >
                         <select value={tagType} onChange={e => { setTagType(e.target.value) }} >
                             <option value='short-answer'>Short Answer</option>
@@ -124,7 +138,7 @@ function Index() {
                             <option value='file-upload'>File Upload</option>
                         </select>
                     </div>
-                </div>
+                </form>
                 {tagType === "multiple-choice" && (
                     <div>
                         <TextField
@@ -149,7 +163,6 @@ function Index() {
                             variant="standard"
                         />
 
-                        <RadioButtonsGroup_Custom deleteable={true} formLabel={labelText} li={multipleChoiceArr} optionDeleteHandler={optionDeleteHandler}></RadioButtonsGroup_Custom>
 
                     </div>
                 )}
@@ -177,7 +190,6 @@ function Index() {
                             variant="standard"
                         />
 
-                        <CheckboxGroup deleteable={true} formLabel={labelText} li={checkboxArr} checkboxDeleteHandler={checkboxDeleteHandler}></CheckboxGroup>
 
                     </div>
                 )}
@@ -186,7 +198,30 @@ function Index() {
                     <p>Required</p>
                     <Switch inputRef={requiredRef} />
                 </div>
-                <Button onClick={addTagHandler} color='primary' variant='contained'>Add</Button>
+                <Button onClick={addTagHandler} color='secondary' variant='contained'>Add</Button>
+
+
+                {tagType === "multiple-choice" && (
+                    <RadioButtonsGroup_Custom deleteable={true} formLabel={labelText} li={multipleChoiceArr} optionDeleteHandler={optionDeleteHandler}></RadioButtonsGroup_Custom>
+                )}
+                {tagType === "check-box" && (
+                    <CheckboxGroup deleteable={true} formLabel={labelText} li={checkboxArr} checkboxDeleteHandler={checkboxDeleteHandler}></CheckboxGroup>
+                )}
+                {tagType === 'file-upload' && (
+                    <div>
+                        <h3>{labelText}</h3>
+                        <Button
+                            varian='default'
+                            component="label"
+                            startIcon={<CloudUploadIcon color='info' />}
+                        >
+                            Upload File
+                            <input
+                                type="file"
+                                hidden
+                            />
+                        </Button></div>
+                )}
             </div>
             <FormDisplay deleteTagHandler={deleteTagHandler} tagArr={tagArr} />
 

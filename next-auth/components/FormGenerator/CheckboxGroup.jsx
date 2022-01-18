@@ -19,8 +19,8 @@ function CheckboxGroup({ formLabel, li, deleteable = false, checkboxDeleteHandle
                 {
                     li.map((l, key) => {
                         return (
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <FormControlLabel key={key} value={l.value} control={<Checkbox />} label={l.label} />
+                            <Box key={key} sx={{ display: 'flex', alignItems: 'center' }}>
+                                <FormControlLabel value={l.value} control={<Checkbox />} label={l.label} />
                                 {deleteable && <IconButton id={l.value} onClick={(e) => checkboxDeleteHandler(l.value)}> <DeleteIcon /> </IconButton>}
                             </Box>
                         )

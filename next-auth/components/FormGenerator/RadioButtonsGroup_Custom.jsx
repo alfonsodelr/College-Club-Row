@@ -20,8 +20,8 @@ export default function RadioButtonsGroup_Custom({ formLabel, li, deleteable = f
                 {
                     li.map((l, key) => {
                         return (
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <FormControlLabel key={key} value={l.value} control={<Radio />} label={l.label} />
+                            <Box key={key} sx={{ display: 'flex', alignItems: 'center' }}>
+                                <FormControlLabel value={l.value} control={<Radio />} label={l.label} />
                                 {deleteable && <IconButton id={l.value} onClick={(e) => optionDeleteHandler(l.value)}> <DeleteIcon /> </IconButton>}
                             </Box>
                         )

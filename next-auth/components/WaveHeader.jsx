@@ -8,10 +8,10 @@ import Head from 'next/head'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-// import Typography from '@mui/material/Typography';
-// import Button from '@mui/material/Button';
-// import IconButton from '@mui/material/IconButton';
-// import MenuIcon from '@mui/icons-material/MenuSharp';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/MenuSharp';
 
 export default function Wave({ headerTitle = "" }) {
   const [fixedHeader, setFixedHeader] = useState(false);
@@ -33,12 +33,8 @@ export default function Wave({ headerTitle = "" }) {
       setFixedHeader(false)
     }
   }
-
-
-  // { tag: "input", onblur: onblurHandler, label: "First name", type: "text", id: "fname", placeholder: "first name", required: true, regex: "/^([a-zA-Z0-9 ,.'-]){2,50}$", maxLength: 50 },
-
   return (
-    <>
+    <div>
       <Head>
         <title>My page title</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -119,59 +115,11 @@ export default function Wave({ headerTitle = "" }) {
           </div>
           {/* waves ends */}
         </div>
-        {/* Header ends /}
-        <nav className={fixedHeader === true ? $['fixed-header'] : ""}>
-          <div className={fixedHeader === true ? $['visible-title'] : ""}>College Club Row</div>
-          <ul>
-
-            <li>
-              <a href="/clubs">Home</a>
-            </li>
-
-            <li>
-              {/* {`${baseURl}clubs/createclub`} /}
-              <a href="/clubs/createclub">Create Club</a>
-            </li>
-            <li>
-
-              <a href="/clubs/contact">Contact</a>
-            </li>
-            {!session && (
-              <li>
-                <a
-                  href={`/api/auth/signin`}
-                  className={$.buttonPrimary}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    signIn()
-                  }}
-                >
-                  Sign in
-                </a>
-              </li>
-            )}
-            {session && (
-              <li>
-                <a
-                  href={`/api/auth/signout`}
-                  className={$.button}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    signOut()
-                  }}
-                >
-                  Sign out
-                </a>
-              </li>
-            )}
-          </ul>
-        </nav>
-                */}
 
         <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="fixed" > {/*style={{ background: 'white', color: "black" }} */}
+          <AppBar > {/*style={{ background: 'white', color: "black" }} */}
             <Toolbar>
-              {/*<IconButton
+              {/* <IconButton
                 size="large"
                 edge="start"
                 color="inherit"
@@ -179,19 +127,19 @@ export default function Wave({ headerTitle = "" }) {
                 sx={{ mr: 2 }}
               >
                 <MenuIcon />
-              </IconButton>
+              </IconButton> */}
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                News
+                Form Generator
               </Typography>
-              <Button color="inherit">Login</Button>
-              <Button color="inherit">Login</Button>
+              {/* <Button variant='standard' color="inherit">Generate</Button> */}
+              {/* <Button color="inherit">Login</Button>
               <Button color="inherit">Login</Button>
               <Button color="inherit">Login</Button> */}
             </Toolbar>
           </AppBar>
         </Box>
       </header>
-    </>
+    </div>
   )
 }
 
