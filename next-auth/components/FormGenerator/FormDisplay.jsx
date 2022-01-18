@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import $ from './Index.module.scss'
 import RadioButtonsGroup_Custom from './RadioButtonsGroup_Custom';
-
+import CheckboxGroup from './CheckboxGroup';
 
 function FormDisplay({ tagArr, deleteTagHandler }) {
 
@@ -35,6 +35,14 @@ function FormDisplay({ tagArr, deleteTagHandler }) {
                         return (
                             <Box key={e.id} sx={{ flexDirection: 'column', boxShadow: 3 }} className={$.containerFlex} >
                                 <RadioButtonsGroup_Custom formLabel={e.label} li={e.values}></RadioButtonsGroup_Custom>
+                                <Button onClick={deleteTagHandler} id={e.id} variant="outlined" startIcon={<DeleteIcon />}>
+                                    Delete
+                                </Button>
+                            </Box>)
+                    } else if (e.tagType === 'check-box') {
+                        return (
+                            <Box key={e.id} sx={{ flexDirection: 'column', boxShadow: 3 }} className={$.containerFlex} >
+                                <CheckboxGroup formLabel={e.label} li={e.values}></CheckboxGroup>
                                 <Button onClick={deleteTagHandler} id={e.id} variant="outlined" startIcon={<DeleteIcon />}>
                                     Delete
                                 </Button>

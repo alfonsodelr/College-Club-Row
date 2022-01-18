@@ -13,8 +13,7 @@ export default function RadioButtonsGroup_Custom({ formLabel, li, deleteable = f
         <FormControl >
             <FormLabel id="demo-radio-buttons-group-label">{formLabel}</FormLabel>
             <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="female"
+                aria-labelledby="radio-buttons-group-label"
                 name="radio-buttons-group"
             // onChange={handleChange}
             >

@@ -1,19 +1,17 @@
 import { React, useRef, useState, useEffect } from 'react'
-import CustomInput from './customInput'
 import $ from './Index.module.scss'
-import Input from '../Input'
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
-import DeleteIcon from '@mui/icons-material/Delete';
 import RadioButtonsGroup_Custom from './RadioButtonsGroup_Custom';
-import Box from '@mui/material/Box';
 import Radio from '@mui/material/Radio';
 import FormDisplay from './FormDisplay';
 import InputAdornment from '@mui/material/InputAdornment';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import CheckboxGroup from './CheckboxGroup';
 function Index() {
-    const labelRef = useRef();
+    const labelRef = useRef('');
+    const checkboxRef = useRef('')
     const [labelText, setLabelText] = useState('')
     const tagRef = useRef();
     const multipleChoiceOptionRef = useRef('');
@@ -22,7 +20,7 @@ function Index() {
     const [tagArr, setTagArr] = useState([])
     const [tagType, setTagType] = useState('short-answer')
     const [multipleChoiceArr, setMultipleChoiceArr] = useState([])
-
+    const [checkboxArr, setCheckboxArr] = useState([])
 
     function varNameGenerator(str, timeStemp = true, time = Date.now()) {
         //check for undefined property!!!!!
@@ -38,13 +36,19 @@ function Index() {
     }
     function optionDeleteHandler(e) {
         const targetValue = e;
-        console.log("handle is on to delete", e)
         setMultipleChoiceArr(multipleChoiceArr.filter(item => item.value !== targetValue))
     }
+    function checkboxDeleteHandler(e) {
+        const targetValue = e;
+        console.log("delete handler isn on ")
+        setCheckboxArr(checkboxArr.filter(item => item.value !== targetValue))
+    }
+
 
     useEffect(() => {
-        //reset refs
+        //reset default values
         setLabelText('');
+        setMultipleChoiceArr([])
         setTagType("short-answer");
         requiredRef.current.value = '';
         descriptionRef.current.value = '';
@@ -72,6 +76,10 @@ function Index() {
             type = 'option';
             values = multipleChoiceArr;
 
+        } else if (tagType === 'check-box') {
+            tag = 'input';
+            type = 'checkbox';
+            values = checkboxArr;
         }
         return { tag, type, max, min, id, classes, placeholder, required, values, description, tagType }
     }
@@ -94,13 +102,19 @@ function Index() {
         setMultipleChoiceArr(preState => [...preState, newOption]);
         multipleChoiceOptionRef.current.value = '';
     }
+    const addCheckBoxHandler = e => {
+        //check for empty
+        const label = checkboxRef.current.value;
+        const newOption = { value: varNameGenerator(label), label }
+        setCheckboxArr(preState => [...preState, newOption]);
+        checkboxRef.current.value = '';
+    }
 
     return (
         <div className={$.formWrap}>
             <div className={$.columnFlex}>
                 <div className={$.formElement}>
                     <TextField value={labelText} onChange={e => setLabelText(e.target.value)} id="tagLabel" label="Label" variant="standard" />
-
                     <div className={$.select} >
                         <select value={tagType} onChange={e => { setTagType(e.target.value) }} >
                             <option value='short-answer'>Short Answer</option>
@@ -136,6 +150,34 @@ function Index() {
                         />
 
                         <RadioButtonsGroup_Custom deleteable={true} formLabel={labelText} li={multipleChoiceArr} optionDeleteHandler={optionDeleteHandler}></RadioButtonsGroup_Custom>
+
+                    </div>
+                )}
+                {tagType === "check-box" && (
+                    <div>
+                        <TextField
+                            sx={{ mb: 3 }}
+                            fullWidth
+                            inputRef={checkboxRef}
+                            id="input-with-icon-textfield"
+                            label="checkbox choice option"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Checkbox />
+                                    </InputAdornment>
+
+                                ),
+                                endAdornment: (
+                                    <InputAdornment position='end'>
+                                        <Button onClick={addCheckBoxHandler} color='secondary' variant='contained'>Add Option</Button>
+                                    </InputAdornment>
+                                )
+                            }}
+                            variant="standard"
+                        />
+
+                        <CheckboxGroup deleteable={true} formLabel={labelText} li={checkboxArr} checkboxDeleteHandler={checkboxDeleteHandler}></CheckboxGroup>
 
                     </div>
                 )}
