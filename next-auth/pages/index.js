@@ -9,6 +9,7 @@ export default function Page() {
     <Box sx={{ backgroundColor: 'red', display: 'flex', flexDirection: 'column', width: '100%' }}>
       <Wave headerTitle="Form Generator" />
       <FormGenerator />
+      test
     </Box>
   )
 }
