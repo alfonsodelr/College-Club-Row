@@ -1,0 +1,120 @@
+[
+    {
+        "tag": "input",
+        "type": "text",
+        "max": 200,
+        "min": 1,
+        "id": "firstname1642558969765",
+        "classes": "",
+        "placeholder": "",
+        "required": false,
+        "values": "",
+        "description": "enter your first name",
+        "tagType": "short-answer",
+        "label": "first name"
+    },
+    {
+        "tag": "input",
+        "type": "text",
+        "max": 200,
+        "min": 1,
+        "id": "firstname1642558974892",
+        "classes": "",
+        "placeholder": "",
+        "required": false,
+        "values": "",
+        "description": "enter your first name",
+        "tagType": "short-answer",
+        "label": "first name"
+    },
+    {
+        "tag": "input",
+        "type": "text",
+        "max": 200,
+        "min": 1,
+        "id": "firstname1642558982505",
+        "classes": "",
+        "placeholder": "",
+        "required": false,
+        "values": "",
+        "description": "enter your first name",
+        "tagType": "short-answer",
+        "label": "first name"
+    },
+    {
+        "tag": "textarea",
+        "type": "text",
+        "max": 500,
+        "min": 1,
+        "id": "firstname1642558995142",
+        "classes": "",
+        "placeholder": "",
+        "required": true,
+        "values": "",
+        "description": "enter your first name",
+        "tagType": "paragraph",
+        "label": "first name"
+    },
+    {
+        "tag": "select",
+        "type": "option",
+        "max": "",
+        "min": "",
+        "id": "firstname1642559033020",
+        "classes": "",
+        "placeholder": "",
+        "required": true,
+        "values": [
+            {
+                "value": "asdfasdf1642559009014",
+                "label": "asdfasdf"
+            },
+            {
+                "value": "asdfasdf1642559013089",
+                "label": "asdfasdf"
+            },
+            {
+                "value": "asdfsdf1642559017509",
+                "label": "asdfsdf"
+            },
+            {
+                "value": "asdasdasdasd1642559020497",
+                "label": "asdasdasdasd"
+            }
+        ],
+        "description": "enter your first name",
+        "tagType": "multiple-choice",
+        "label": "first name"
+    },
+    {
+        "tag": "input",
+        "type": "checkbox",
+        "max": "",
+        "min": "",
+        "id": "firstname1642559064351",
+        "classes": "",
+        "placeholder": "",
+        "required": true,
+        "values": [
+            {
+                "value": "asdasdasdasd1642559048516",
+                "label": "asdasdasdasd"
+            },
+            {
+                "value": "asdfsdf1642559051900",
+                "label": "asdfsdf"
+            },
+            {
+                "value": "asdasdasdasd1642559058990",
+                "label": "asdasdasdasd"
+            },
+            {
+                "value": "asdasdasdasd1642559062094",
+                "label": "asdasdasdasd"
+            }
+        ],
+        "description": "",
+        "tagType": "check-box",
+        "label": "first name"
+    }
+]

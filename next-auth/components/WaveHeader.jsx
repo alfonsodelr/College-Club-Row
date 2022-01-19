@@ -36,7 +36,7 @@ export default function Wave({ headerTitle = "" }) {
   return (
     <div>
       <Head>
-        <title>My page title</title>
+        <title>FormGenerator</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <header className={$.header}>
