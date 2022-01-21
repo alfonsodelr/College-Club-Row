@@ -1,6 +1,9 @@
 import { getItem } from "../../../libs/ddb_getitem";
 import { GetItemCommandInput, PutItemCommandInput } from "@aws-sdk/client-dynamodb";
 import { putItem } from "../../../libs/ddb_putitem";
+// import ajv from "../../../src/validation"
+
+
 interface GET_Body {
     key: {
         clubID: {
@@ -11,7 +14,7 @@ interface GET_Body {
         }
     }
 }
-interface POST_Body {
+type POST_Body = {
     Item: {
         clubID: { S: string },
         formID: { S: string },
@@ -22,6 +25,8 @@ export default async function handler(req, res) {
     try {
         if (req.method === 'POST') {
             const item = req.body.Item;
+
+
             const params: PutItemCommandInput = {
                 TableName: process.env.DB_CLUB_FORM_TABLENAME,
                 Item: item,
@@ -30,8 +35,9 @@ export default async function handler(req, res) {
             return res.status(200).json({ msg: data })
 
         } else if (req.method === "GET") {
-            const key: GET_Body = req.body.Key;
-            if (!key) throw Error('{ msg: "form/get: param error" }')
+            const key = req.body.Key;
+            // let schema = ajv.getSchema('getItemSchema');
+            // if (!schema(key)) throw Error('{ msg: "form/get: param error" }')
 
             const params: GetItemCommandInput = {
                 TableName: process.env.DB_CLUB_FORM_TABLENAME,
