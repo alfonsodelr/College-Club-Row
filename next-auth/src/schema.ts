@@ -1,18 +1,26 @@
-const getItemSchema = {
+const api_form_get_schema = {
     type: "object",
     properties: {
         Key: {
             type: "object",
             properties: {
-                clubID: { S: { type: "string" } },
-                formID: { S: { type: "string" } }
-            }
+                clubID: {
+                    type: "object",
+                    properties: {
+                        S: { type: "string", nullable: false }
+                    }
+                },
+                formID: {
+                    type: "object",
+                    properties: {
+                        S: { type: "string", nullable: false }
+                    }
+                }
+            },
+            required: ["clubID", "formID"],
+            additionalProperties: false,
         }
-
     },
-    required: ["clubID"],
-    additionalProperties: false
 }
 
-
-export { getItemSchema }
+export { api_form_get_schema }

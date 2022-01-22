@@ -1,51 +1,32 @@
 import { getItem } from "../../../libs/ddb_getitem";
-import { GetItemCommandInput, PutItemCommandInput } from "@aws-sdk/client-dynamodb";
 import { putItem } from "../../../libs/ddb_putitem";
-// import ajv from "../../../src/validation"
+import { GetItemCommandInput, PutItemCommandInput } from "@aws-sdk/client-dynamodb";
+// import { ajv } from "../../../src/validation"
+import { ajv } from "../../../src/validation"
 
 
-interface GET_Body {
-    key: {
-        clubID: {
-            S: string,
-        },
-        formID: {
-            S: string,
-        }
-    }
-}
-type POST_Body = {
-    Item: {
-        clubID: { S: string },
-        formID: { S: string },
-    }
-}
+
+const validateGet = ajv.getSchema("api_form_get_schema")
 
 export default async function handler(req, res) {
     try {
         if (req.method === 'POST') {
-            const item = req.body.Item;
-
-
-            const params: PutItemCommandInput = {
-                TableName: process.env.DB_CLUB_FORM_TABLENAME,
-                Item: item,
-            };
-            const data = await putItem(params)
-            return res.status(200).json({ msg: data })
+            // const item = req.body.Item;
+            // const params: PutItemCommandInput = {
+            //     TableName: process.env.DB_CLUB_FORM_TABLENAME,
+            //     Item: item,
+            // };
+            // const data = await putItem(params)
+            return res.status(200).json({ msg: "data" })
 
         } else if (req.method === "GET") {
-            const key = req.body.Key;
-            // let schema = ajv.getSchema('getItemSchema');
-            // if (!schema(key)) throw Error('{ msg: "form/get: param error" }')
-
+            if (!validateGet(req.body)) throw new Error("api/form/index.ts --get: Invalid Param");
             const params: GetItemCommandInput = {
                 TableName: process.env.DB_CLUB_FORM_TABLENAME,
                 Key: req.body.Key,
             }
             const data = await getItem(params);
-            return res.status(200).json({ data: data })
-
+            return res.status(200).json({ data: "" })
         }
     } catch (error) {
         console.log(error)
