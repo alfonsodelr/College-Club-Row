@@ -1,0 +1,49 @@
+//justify = main axies
+//lign = cross axies
+//content = whole axies as one line
+//item = whole axies as multiple line
+
+.container{
+    display: flex;
+    height: 550px;//height specifies the total flex box height
+    // align-items: stretch; // default is stretch
+    // align-content: stretch; //default is stretch
+    // flex-direction:row;
+    // flex-wrap: wrap;
+    flex-flow: row wrap;//flex-row = flex-direction + flex-wrap
+    // &:nth-child(1) { order: 2; } //change the order of child form container or child
+    // justify-content: center;
+    .item{
+        background-color: rgb(215, 218, 221);
+        margin: 2px;
+        padding: 1px;
+        width: 25%;
+        flex: 0 1 auto; //default='0 1 auto' value=[ <flex-grow> <flex-shrink> ? || <flex-basis> ] 
+    }
+    .item11{
+        order: 1;
+        flex-grow: 1;
+        // align-self: center; //breaks the normal 'align-items' alignment flow 
+    }
+    .item10{
+        order: 2;
+        height: 50px;
+        flex-grow: 3;
+    }
+    .item1{
+        //flex-basis: initial main size of the flex item, before free space is distributed according to the flex factors.
+        //value=flext item width; width percent relative to parent flex container not window width.
+        //if parent width is not defined, uses content width
+        // flex-basis: 50%;
+        width: 600px;
+        flex-shrink: 1;
+
+    }
+    .item6{
+        flex-grow: 1;
+    }
+
+    .item2{
+        flex-shrink: 3;
+    }
+}

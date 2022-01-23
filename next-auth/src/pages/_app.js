@@ -1,5 +1,5 @@
 import { SessionProvider, useSession } from 'next-auth/react'
-import './styles.css'
+import '../styles/globals.css'
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 

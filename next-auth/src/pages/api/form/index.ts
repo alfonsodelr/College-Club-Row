@@ -1,9 +1,9 @@
-import { getItem } from "../../../libs/ddb_getitem";
-import { putItem } from "../../../libs/ddb_putitem";
-import { updateItem } from "../../../libs/ddb_updateitem";
-import { deleteItem } from "../../../libs/ddb_deleteitem"
+import { getItem } from "../../../../libs/ddb_getitem";
+import { putItem } from "../../../../libs/ddb_putitem";
+import { updateItem } from "../../../../libs/ddb_updateitem";
+import { deleteItem } from "../../../../libs/ddb_deleteitem"
 import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, DeleteItemCommandInput } from "@aws-sdk/client-dynamodb";
-import { ajv } from "../../../src/validation"
+import { ajv } from "../../../utils/validation"
 
 
 

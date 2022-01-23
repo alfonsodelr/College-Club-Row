@@ -23,7 +23,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/schema.js"
+    "utils/schema.js",
+    "pages/index.jsx"
   ],
   "exclude": [
     "node_modules"
