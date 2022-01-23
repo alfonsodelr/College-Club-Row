@@ -1,6 +1,8 @@
 // Import required AWS SDK clients and commands for Node.js
-import { DeleteItemCommand } from "@aws-sdk/client-dynamodb";
-import { ddbClient } from "./libs/ddbClient.js";
+// import { DeleteItemCommand } from "@aws-sdk/client-dynamodb";
+// import { ddbClient } from "./libs/ddbClient.js";
+import { DeleteItemCommand, DeleteItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { ddbClient } from "./ddbClient";
 
 // // Set the parameters
 // export const params = {
@@ -10,7 +12,7 @@ import { ddbClient } from "./libs/ddbClient.js";
 //   },
 // };
 
-export const run = async (params) => {
+const deleteItem = async (params: DeleteItemCommandInput) => {
     try {
         const data = await ddbClient.send(new DeleteItemCommand(params));
         console.log("Success, item deleted", data);
@@ -24,3 +26,5 @@ export const run = async (params) => {
         }
     }
 };
+
+export { deleteItem }

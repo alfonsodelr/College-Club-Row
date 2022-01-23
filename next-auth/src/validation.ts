@@ -1,12 +1,20 @@
 import Ajv from "ajv"
 // import * as schema_user from "./schema_user.json"
 // import * as schema_document from "./schema_document.json"
-import { api_form_get_schema } from "./schema"
+import { api_form_get_schema, api_form_post_schema, api_form_patch_schema, api_form_delete_schema } from "./schema"
 const ajv = new Ajv()
 
 ajv.addSchema(api_form_get_schema, "api_form_get_schema");
 ajv.getSchema("api_form_get_schema");
 
+ajv.addSchema(api_form_post_schema, "api_form_post_schema");
+ajv.getSchema("api_form_post_schema");
+
+ajv.addSchema(api_form_patch_schema, "api_form_patch_schema");
+ajv.getSchema("api_form_patch_schema")
+
+ajv.addSchema(api_form_delete_schema, "api_form_delete_schema");
+ajv.getSchema("api_form_delete_schema")
 
 export { ajv }
 
