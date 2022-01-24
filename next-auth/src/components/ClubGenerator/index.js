@@ -3,8 +3,7 @@ import TextField from '@mui/material/TextField';
 import $ from "./index.module.scss"
 import Toolbar from '@mui/material/Toolbar';
 import Button from "@mui/material/Button"
-// import { useRouter } from 'next/router'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 function index() {
     const router = useRouter()
 
