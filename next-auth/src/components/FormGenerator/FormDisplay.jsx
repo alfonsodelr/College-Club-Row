@@ -7,7 +7,6 @@ import $ from './Index.module.scss'
 import RadioButtonsGroup_Custom from './RadioButtonsGroup_Custom';
 import CheckboxGroup from './CheckboxGroup';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
 function FormDisplay({ tagArr, deleteTagHandler }) {
 
     return (
@@ -15,14 +14,17 @@ function FormDisplay({ tagArr, deleteTagHandler }) {
             {
                 tagArr.map((e) => {
                     if (e.tagType === 'short-answer') {
+                        console.log(e)
                         return (
+
                             <Box key={e.id} sx={{ flexDirection: 'row', boxShadow: 3 }} className={$.containerFlex} >
                                 <TextField multiline={false} fullWidth id={e.id} placeholder={e.description} label={e.label} variant="standard" required={e.required} />
                                 <div className={$.divider}></div>
                                 <Button onClick={deleteTagHandler} id={e.id} variant="outlined" startIcon={<DeleteIcon />}>
                                     Delete
                                 </Button>
-                            </Box>)
+                            </Box>
+                        )
                     } else if (e.tagType === 'paragraph') {
                         return (
                             <Box key={e.id} sx={{ flexDirection: 'row', boxShadow: 3 }} className={$.containerFlex} >

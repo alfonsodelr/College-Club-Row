@@ -3,7 +3,6 @@ import $ from './WaveHeader.module.scss'
 import { signIn, signOut, useSession } from "next-auth/react"
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-
 // ///mui import 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -14,29 +13,12 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/MenuSharp';
 
 export default function Wave({ headerTitle = "" }) {
-  const [fixedHeader, setFixedHeader] = useState(false);
   const { data: session, status } = useSession()
-  const headerImageHeight = 540;
 
-  // useEffect(() => {
-  //   window.addEventListener('scroll', onScroll)
-  //   return () => window.removeEventListener('scroll', onScroll)
-  // }, [])
-
-
-  const onScroll = () => {
-
-    console.log(window.innerHeight)
-    if (window.scrollY >= headerImageHeight) {
-      setFixedHeader(true)
-    } else {
-      setFixedHeader(false)
-    }
-  }
   return (
     <div>
       <Head>
-        <title>FormGenerator</title>
+        <title>{headerTitle}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <header className={$.header}>
@@ -72,7 +54,7 @@ export default function Wave({ headerTitle = "" }) {
                 />
               </g>
             </svg>
-            <h1>{headerTitle}</h1>
+            <Typography>{headerTitle}</Typography>
           </div>
           {/*Waves Container*/}
           <div>
@@ -115,29 +97,6 @@ export default function Wave({ headerTitle = "" }) {
           </div>
           {/* waves ends */}
         </div>
-
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar > {/*style={{ background: 'white', color: "black" }} */}
-            <Toolbar>
-              {/* <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-                <MenuIcon />
-              </IconButton> */}
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Form Generator
-              </Typography>
-              {/* <Button variant='standard' color="inherit">Generate</Button> */}
-              {/* <Button color="inherit">Login</Button>
-              <Button color="inherit">Login</Button>
-              <Button color="inherit">Login</Button> */}
-            </Toolbar>
-          </AppBar>
-        </Box>
       </header>
     </div>
   )

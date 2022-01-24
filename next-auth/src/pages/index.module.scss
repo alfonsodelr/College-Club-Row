@@ -3,6 +3,8 @@
 //content = whole axies as one line
 //item = whole axies as multiple line
 
+//justify-self: sets the way a box is justified inside its alignment container along the appropriate axis.
+//justify-items: defines the default justify-self for all items of the box, giving them all a default way of justifying each box along the appropriate axis.
 .container{
     display: flex;
     height: 550px;//height specifies the total flex box height

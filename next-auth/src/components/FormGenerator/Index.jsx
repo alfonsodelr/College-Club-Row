@@ -35,6 +35,7 @@ function Index() {
     function deleteTagHandler(e) {
         const targetId = e.target.id;
         setTagArr(tagArr.filter(item => item.id !== targetId));
+        console.log("delete is on", targetId)
     }
     function deleteModHandler(targetValue) {
         setHotDisplayArr(hotDisplayArr.filter(mod => mod.value !== targetValue))
