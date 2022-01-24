@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 
 
-function CheckboxGroup({ formLabel, li, deleteable = false, checkboxDeleteHandler = (e) => { } }) {
+function CheckboxGroup({ formLabel, li, deleteable = false, deleteModHandler = (e) => { } }) {
     return (
         <FormControl>
             <FormLabel id="demo-radio-buttons-group-label">{formLabel}</FormLabel>
@@ -21,7 +21,7 @@ function CheckboxGroup({ formLabel, li, deleteable = false, checkboxDeleteHandle
                         return (
                             <Box key={key} sx={{ display: 'flex', alignItems: 'center' }}>
                                 <FormControlLabel value={l.value} control={<Checkbox />} label={l.label} />
-                                {deleteable && <IconButton id={l.value} onClick={(e) => checkboxDeleteHandler(l.value)}> <DeleteIcon /> </IconButton>}
+                                {deleteable && <IconButton id={l.value} onClick={(e) => deleteModHandler(l.value)}> <DeleteIcon /> </IconButton>}
                             </Box>
                         )
                     })
