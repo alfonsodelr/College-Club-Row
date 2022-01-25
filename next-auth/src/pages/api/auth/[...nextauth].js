@@ -16,6 +16,7 @@ export default NextAuth({
   // a separate secret is defined explicitly for encrypting the JWT.
   secret: process.env.SECRET,
 
+  //`The session object is not persisted server side`, but you can use accessToken to get around this. raed more on documentation
   session: {
     // Use JSON Web Tokens for session instead of database sessions.
     // This option can be used with or without a database for users/accounts.
@@ -34,9 +35,14 @@ export default NextAuth({
   // JSON Web tokens are only used for sessions if the `jwt: true` session
   // option is set - or by default if no database is specified.
   // https://next-auth.js.org/configuration/options#jwt
+  // When using JSON Web Tokens the jwt() callback is invoked before the session() callback,
+  //              so anything you add to the JSON Web Token will be immediately available in 
+  //              the session callback, like for example an access_token from a provider.
   jwt: {
+    // secret: process.env.SECRET   //default
+    //realated reading: https://next-auth.js.org/configuration/options#jwt
     // You can define your own encode/decode functions for signing and encryption
-    // if you want to override the default behaviour.
+    // if you want to override the default behaviour of encrypted (JWE). We recommend you keep this behaviour.
     // encode: async ({ secret, token, maxAge }) => {},
     // decode: async ({ secret, token, maxAge }) => {},
   },
@@ -61,19 +67,85 @@ export default NextAuth({
     // async signIn({ user, account, profile, email, credentials }) { return true },
     // async redirect({ url, baseUrl }) { return baseUrl },
     // async session({ session, token, user }) { return session },
-    // async jwt({ token, user, account, profile, isNewUser }) { return token }
-  },
 
-  // Events are useful for logging
-  // https://next-auth.js.org/configuration/events
-  events: {},
+    //read more on: https://next-auth.js.org/configuration/callbacks#jwt-callback
+    // The arguments user, account, profile and isNewUser are only passed the first time 
+    //            this callback is called on a new session, after the user signs in. In 
+    //            subsequent calls, only token will be available.
+    //create custom session object reading: 
+    //            https://vizzuality.github.io/devismos/docs/researches/next-auth/#solution
+    async jwt({ token, user, account, profile, isNewUser, session }) {
 
-  // You can set the theme to 'light', 'dark' or use 'auto' to default to the
-  // whatever prefers-color-scheme is set to in the browser. Default is 'auto'
-  theme: {
-    colorScheme: "light",
-  },
+      // //logging jwt params for development: 
+      //   console.log(`token: ${JSON.stringify(token)} ,\n user: ${JSON.stringify(user)},\
+      //   \n account: ${JSON.stringify(account)} \n profile: ${JSON.stringify(profile)}\n isNewUSer: \ 
+      //    ${JSON.stringify(isNewUser)}\n session: ${JSON.stringify(session)} \n`)
+      //   return token
+    },
 
-  // Enable debug messages in the console if you are having problems
-  debug: false,
+    // Events are useful for logging
+    // https://next-auth.js.org/configuration/events
+    events: {},
+
+    // You can set the theme to 'light', 'dark' or use 'auto' to default to the
+    // whatever prefers-color-scheme is set to in the browser. Default is 'auto'
+    theme: {
+      colorScheme: "light",
+    },
+
+    // Enable debug messages in the console if you are having problems
+    debug: false,
+  }
 })
+
+
+
+
+/*
+//--------------GoogleProvider JWT Callback(callbacks.jwt) first time response-----------------------
+//funciton signature: async jwt({ token, user, account, profile, isNewUser, session }) =>{}
+//note: after the first time call back, all params except token is undefined.
+{
+  token: {
+    "name": "",
+    "email": "",
+    "picture": "",
+    "sub": ""
+  },
+  user: {
+    "id": "",
+    "name": "",
+    "email": "",
+    "image": ""
+  },
+  account: {
+    "provider": "google",
+    "type": "oauth",
+    "providerAccountId": "",
+    "access_token": "",
+    "expires_at": 1643149120,
+    "scope": "",
+    "token_type": "Bearer",
+    "id_token": ""
+  },
+  profile: {
+    "iss": "https://accounts.google.com",
+    "azp": "",
+    "aud": "",
+    "sub": "",
+    "email": "",
+    "email_verified": true,
+    "at_hash": "",
+    "name": "",
+    "picture": "",
+    "given_name": "",
+    "family_name": "",
+    "locale": "en",
+    "iat": 1643145521,
+    "exp": 1643149121
+  },
+  isNewUSer: undefined,
+  session: undefined
+}
+
+*/
