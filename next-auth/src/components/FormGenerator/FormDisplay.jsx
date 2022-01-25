@@ -14,7 +14,6 @@ function FormDisplay({ tagArr, deleteTagHandler }) {
             {
                 tagArr.map((e) => {
                     if (e.tagType === 'short-answer') {
-                        console.log(e)
                         return (
 
                             <Box key={e.id} sx={{ flexDirection: 'row', boxShadow: 3 }} className={$.containerFlex} >

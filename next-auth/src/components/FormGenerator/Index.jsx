@@ -35,7 +35,6 @@ function Index() {
     function deleteTagHandler(e) {
         const targetId = e.target.id;
         setTagArr(tagArr.filter(item => item.id !== targetId));
-        console.log("delete is on", targetId)
     }
     function deleteModHandler(targetValue) {
         setHotDisplayArr(hotDisplayArr.filter(mod => mod.value !== targetValue))
@@ -54,7 +53,10 @@ function Index() {
     }
 
     const generateFormHandler = () => {
-        console.log(state.tagArr)
+        // TODO: 
+        // 1. get clubID
+        // 2. store club form tags
+        // 3. redirect to signup page
     }
 
 

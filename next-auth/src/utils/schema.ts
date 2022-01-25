@@ -40,6 +40,9 @@ const api_form_post_schema = {
 }
 
 
+
+
+
 const api_form_patch_schema = {
     type: "object",
     properties: {
@@ -59,4 +62,32 @@ const api_form_patch_schema = {
 }
 
 
-export { api_form_get_schema, api_form_post_schema, api_form_patch_schema, api_form_delete_schema }
+const api_club_post_schema = {
+    type: "object",
+    properties: {
+        clubID: { type: "string" },
+        formID: { type: "string" },
+        clubName: { type: "string" }
+    },
+    minProperties: 2,
+    required: ["clubID", "clubName"],
+    additionalProperties: true,
+}
+
+const api_club_get_schema = {
+    type: "object",
+    properties: {
+        clubID: { type: "string" },
+    },
+    maxProperties: 1,
+    required: ["clubID",],
+}
+
+export {
+    api_form_get_schema,
+    api_form_post_schema,
+    api_form_patch_schema,
+    api_form_delete_schema,
+    api_club_post_schema,
+    api_club_get_schema,
+}
