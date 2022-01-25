@@ -9,4 +9,5 @@ function create() {
     </div>;
 }
 
+create.auth = true;
 export default create;
