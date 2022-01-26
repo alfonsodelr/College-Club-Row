@@ -7,4 +7,9 @@ function varNameGenerator(str, timeStemp = true, time = Date.now()) {
     return (varname + time);
 }
 
-export { varNameGenerator }
+//Functional Programming helper funcitons
+const Tap = (fn = console.log) => x => (fn(x), x);
+const Pipe = (...fns) => fns.reduce((result, f) => (...args) => f(result(...args)));
+
+
+export { varNameGenerator, Tap, Pipe }

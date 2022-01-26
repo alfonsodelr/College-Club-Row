@@ -40,9 +40,6 @@ const api_form_post_schema = {
 }
 
 
-
-
-
 const api_form_patch_schema = {
     type: "object",
     properties: {
@@ -83,6 +80,32 @@ const api_club_get_schema = {
     required: ["clubID",],
 }
 
+const api_user_post_schema = {
+    type: "object",
+    properties: {
+        userID: { type: "number" },
+        clubs: { type: "array", items: { type: "string" } },
+        tasks: { type: "array", items: { type: "object" } },
+        userName: { type: "string" },
+        legalName: { type: "string" },
+        role: { type: "array", items: { type: "string" } }
+    },
+    required: ["userID", "legalName"],
+    minProperties: 2,
+    additionalProperties: false,
+}
+
+const api_user_get_schema = {
+    type: "object",
+    properties: {
+        userID: { type: "number" }
+    },
+    required: ["userID"],
+    maxProperties: 1,
+
+}
+
+
 export {
     api_form_get_schema,
     api_form_post_schema,
@@ -90,4 +113,6 @@ export {
     api_form_delete_schema,
     api_club_post_schema,
     api_club_get_schema,
+    api_user_post_schema,
+    api_user_get_schema,
 }

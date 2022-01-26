@@ -1,24 +1,33 @@
 import Ajv from "ajv"
-import { api_form_get_schema, api_form_post_schema, api_form_patch_schema, api_form_delete_schema, api_club_post_schema, api_club_get_schema } from "./schema"
+import * as schem from "./schema"
+
 const ajv = new Ajv()
 
-ajv.addSchema(api_form_get_schema, "api_form_get_schema");
+ajv.addSchema(schem.api_form_get_schema, "api_form_get_schema");
 ajv.getSchema("api_form_get_schema");
 
-ajv.addSchema(api_form_post_schema, "api_form_post_schema");
+ajv.addSchema(schem.api_form_post_schema, "api_form_post_schema");
 ajv.getSchema("api_form_post_schema");
 
-ajv.addSchema(api_form_patch_schema, "api_form_patch_schema");
+ajv.addSchema(schem.api_form_patch_schema, "api_form_patch_schema");
 ajv.getSchema("api_form_patch_schema")
 
-ajv.addSchema(api_form_delete_schema, "api_form_delete_schema");
+ajv.addSchema(schem.api_form_delete_schema, "api_form_delete_schema");
 ajv.getSchema("api_form_delete_schema")
 
-ajv.addSchema(api_club_post_schema, "api_club_post_schema");
+ajv.addSchema(schem.api_club_post_schema, "api_club_post_schema");
 ajv.getSchema("api_club_post_schema");
 
-ajv.addSchema(api_club_get_schema, "api_club_get_schema");
+ajv.addSchema(schem.api_club_get_schema, "api_club_get_schema");
 ajv.getSchema("api_club_get_schema")
+
+ajv.addSchema(schem.api_user_post_schema, "api_user_post_schema");
+ajv.getSchema("api_user_post_schema")
+
+ajv.addSchema(schem.api_user_get_schema, "api_user_get_schema")
+ajv.getSchema("api_user_get_schema")
+
+
 export { ajv }
 
 
