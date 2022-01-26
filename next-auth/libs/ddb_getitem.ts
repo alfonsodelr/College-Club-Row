@@ -12,7 +12,7 @@ import { ddbClient } from "./ddbClient";
 
 const getItem = async (params: GetItemCommandInput) => {
     const data = await ddbClient.send(new GetItemCommand(params));
-    console.log("getItem: ", data);
+    if (data.Item === undefined) return { ...data, key: params.Key, error: "Item Not Found" }
     return data;
 };
 
