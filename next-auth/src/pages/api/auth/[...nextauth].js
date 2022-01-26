@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
+import axios from "axios"
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -75,12 +76,25 @@ export default NextAuth({
     //create custom session object reading: 
     //            https://vizzuality.github.io/devismos/docs/researches/next-auth/#solution
     async jwt({ token, user, account, profile, isNewUser, session }) {
+      //1. get user portfolio from 
+      // if (user.id) {
+      //   var userPortfolio = getUser(user.id);
+      // }
+
+      //params other than token in undefined after initial login.
+      if (profile !== undefined && user !== undefined) {
+        console.log(token.sub)
+        // var userPortfolio = getUser(user.id);
+      }
+      //2. add portfolio to token
+
+
 
       // //logging jwt params for development: 
-      //   console.log(`token: ${JSON.stringify(token)} ,\n user: ${JSON.stringify(user)},\
+      // console.log(`token: ${JSON.stringify(token)} ,\n user: ${JSON.stringify(user)},\
       //   \n account: ${JSON.stringify(account)} \n profile: ${JSON.stringify(profile)}\n isNewUSer: \ 
       //    ${JSON.stringify(isNewUser)}\n session: ${JSON.stringify(session)} \n`)
-      //   return token
+      return token
     },
 
     // Events are useful for logging
@@ -98,6 +112,18 @@ export default NextAuth({
   }
 })
 
+
+const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
+async function getUser(userID) {
+  // const res = await axios.get(baseUrl + "/api/user/", { params: { userID } })
+  //   .then(res => {
+  //     console.log(res);
+  //     return res
+  //   }).catch(err => { console.error(err.message) })
+
+  return true
+}
+export { }
 
 
 
