@@ -88,21 +88,27 @@ const api_user_post_schema = {
         tasks: { type: "array", items: { type: "object" } },
         userName: { type: "string" },
         legalName: { type: "string" },
-        role: { type: "array", items: { type: "string" } }
+        role: { type: "array", items: { type: "string" } },
+        email: { type: "string" },
     },
-    required: ["userID", "legalName"],
-    minProperties: 2,
+    required: ["userID", "legalName", "email"],
+    minProperties: 3,
     additionalProperties: false,
 }
 
+
+//userID is the only PK that is requred, but we should get all three: email, name, and userID 
+//because if the user doesn't exist, api will need those three params to create user.
+//email, name and useID are provided by GooglePrividor response at nextAuth.callbacks.jwt.user
 const api_user_get_schema = {
     type: "object",
     properties: {
-        userID: { type: "number" }
+        userID: { type: "number" },
+        legalName: { type: "string" },
+        email: { type: "string" },
     },
-    required: ["userID"],
-    maxProperties: 1,
-
+    required: ["userID", "legalName", "email"],
+    maxProperties: 3,
 }
 
 
