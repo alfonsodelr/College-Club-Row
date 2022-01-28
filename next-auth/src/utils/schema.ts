@@ -97,6 +97,13 @@ const api_user_post_schema = {
 }
 
 
+const api_user_delete_schema = {
+    type: "object",
+    properties: {
+        userID: { type: "number" },
+    }
+}
+
 //userID is the only PK that is requred, but we should get all three: email, name, and userID 
 //because if the user doesn't exist, api will need those three params to create user.
 //email, name and useID are provided by GooglePrividor response at nextAuth.callbacks.jwt.user
@@ -121,4 +128,5 @@ export {
     api_club_get_schema,
     api_user_post_schema,
     api_user_get_schema,
+    api_user_delete_schema,
 }
