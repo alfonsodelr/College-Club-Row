@@ -28,7 +28,8 @@ const putItem = async (params: PutItemCommandInput) => {
         console.log("ddb_putitem: ", data);
         return data;
     } catch (err) {
-        console.error(err);
+        if (err.name === "ConditionalCheckFailedException") { return { err: "ConditionalCheckFailedException" } }
+        return err
     }
 };
 
