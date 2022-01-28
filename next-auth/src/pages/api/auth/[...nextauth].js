@@ -83,8 +83,7 @@ export default NextAuth({
 
       //params other than token in undefined after initial login.
       if (profile !== undefined && user !== undefined) {
-        console.log(token.sub)
-        // var userPortfolio = getUser(user.id);
+        var re = getUser({ userID: token.sub, email: token.email, legalName: token.name })
       }
       //2. add portfolio to token
 
@@ -112,14 +111,13 @@ export default NextAuth({
   }
 })
 
-
 const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
-async function getUser(userID) {
-  // const res = await axios.get(baseUrl + "/api/user/", { params: { userID } })
-  //   .then(res => {
-  //     console.log(res);
-  //     return res
-  //   }).catch(err => { console.error(err.message) })
+async function getUser(userData) {
+  const res = await axios.get(baseUrl + "/api/user/", { params: { ...userData } })
+    .then(res => {
+      console.log(res);
+      return res
+    }).catch(err => { console.error(err.message) })
 
   return true
 }

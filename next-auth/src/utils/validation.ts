@@ -27,6 +27,8 @@ ajv.getSchema("api_user_post_schema")
 ajv.addSchema(schem.api_user_get_schema, "api_user_get_schema")
 ajv.getSchema("api_user_get_schema")
 
+ajv.addSchema(schem.api_user_delete_schema, "api_user_delete_schema");
+ajv.getSchema("api_user_delete_schema")
 
 export { ajv }
 
