@@ -1,9 +1,15 @@
-import { GetItemCommand, GetItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { GetItemCommand, GetItemCommandInput, } from "@aws-sdk/client-dynamodb";
 import { ddbClient } from "./ddbClient";
+const { unmarshall } = require("@aws-sdk/util-dynamodb");
 
 const getItem = async (params: GetItemCommandInput) => {
-    const data = await ddbClient.send(new GetItemCommand(params));
-    return { ...data };
+    try {
+        var data = await ddbClient.send(new GetItemCommand(params))
+        data.Item = unmarshall(data.Item);
+        return { ...data, params };
+    } catch (error) {
+        return { error, params }
+    }
 };
 
 export { getItem }
