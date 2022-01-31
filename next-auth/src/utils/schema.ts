@@ -83,7 +83,7 @@ const api_club_get_schema = {
 const api_user_post_schema = {
     type: "object",
     properties: {
-        userID: { type: "number" },
+        userID: { type: "string" },
         clubs: { type: "array", items: { type: "string" } },
         tasks: { type: "array", items: { type: "object" } },
         userName: { type: "string" },
@@ -100,7 +100,7 @@ const api_user_post_schema = {
 const api_user_delete_schema = {
     type: "object",
     properties: {
-        userID: { type: "number" },
+        userID: { type: "string" },
     }
 }
 
@@ -110,7 +110,7 @@ const api_user_delete_schema = {
 const api_user_get_schema = {
     type: "object",
     properties: {
-        userID: { type: "number" },
+        userID: { type: "string" },
         legalName: { type: "string" },
         email: { type: "string" },
     },
