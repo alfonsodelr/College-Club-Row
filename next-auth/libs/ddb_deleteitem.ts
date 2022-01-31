@@ -15,8 +15,7 @@ import { ddbClient } from "./ddbClient";
 const deleteItem = async (params: DeleteItemCommandInput) => {
     try {
         const data = await ddbClient.send(new DeleteItemCommand(params));
-        console.log("Success, item deleted", data);
-        return data;
+        return { ...data, params };
     } catch (err) {
         console.log("Error", err);
         if (err && err.code === "ResourceNotFoundException") {
