@@ -1,4 +1,4 @@
-import { DynamoDBClient, DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 interface dbClientparams {
     accessKeyId: string,
@@ -17,27 +17,9 @@ const credencials: dbClientparams = {
 const ddbClient = new DynamoDBClient(credencials);
 export { ddbClient };
 
-////attribute types sample
-//reading:      https://www.dynamodbguide.com/anatomy-of-an-item/
-//--------data----------------------
-// {
-//     "Name": { "S": "Alex DeBrie" },
-//     "Age": { "N": "29" },
-//     "Roles": { "L": [{ "S": "Admin" }, { "S": "User" }] }
-// }
-//-------------attribute----------------
-// {
-//     "Item": {
-//         "Name": {
-//             "S": "Alex DeBrie"
-//         },
-//         "Age": {
-//             "N": "29"
-//         },
-//         "Roles": {
-//             "L": [{ "S": "Admin" }, { "S": "User" }]
-//         }
-//     }
-// }
+
+/* //------------------------DOC----------------------------
+1. all DDB commands should return either a  {response.data, params} or a typeOf {Error, params}
 
 
+*/
