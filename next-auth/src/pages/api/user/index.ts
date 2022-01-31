@@ -5,11 +5,11 @@
 import { getItem } from "../../../../libs/ddb_getitem";
 import { putItem } from "../../../../libs/ddb_putitem";
 import { deleteItem } from "../../../../libs/ddb_deleteitem";
-import { GetItemCommandInput, PutItemCommandInput, GetItemCommandOutput } from "@aws-sdk/client-dynamodb";
+import { PutItemCommandInput, } from "@aws-sdk/client-dynamodb";
 import { ajv } from "../../../utils/validation"
 import { ValidateFunction } from 'ajv'
-import { Pipe, Tap } from "../../../utils/helper";
-
+import { Pipe, Tap, generateDefaultUser, userType } from "../../../utils/helper";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 
 
 const tableName = process.env.DB_USER_TABLENAME;
@@ -18,31 +18,6 @@ const getSchema = ajv.getSchema("api_user_get_schema");
 const deleteSchema = ajv.getSchema("api_user_delete_schema")
 const validate = (fn: ValidateFunction) => (data: Object) => { if (!fn(data)) throw new Error("api/user: Invalid_Param"); return data }
 
-type userType = {
-    userID: number | string,
-    clubs: Array<string>,
-    tasks: Array<string>,
-    userName: string,
-    legalName: string,
-    role: Array<string>,
-    email: string,
-}
-
-type GETQuery = {
-    userID: number,
-    email: string,
-    legalName: string,
-}
-
-type POSTBody = {
-    userID: number,
-    clubs: Array<string>,
-    tasks: Array<string>,
-    userName: string,
-    legalName: string,
-    role: Array<string>,
-    email: string
-}
 
 export default async function handler(req, res) {
     var data: any = "";
@@ -50,8 +25,11 @@ export default async function handler(req, res) {
         if (req.method === 'POST') {
             data = await Pipe(validate(postSchema), createPostParams, putItem, checkError,)(req.body);
         } else if (req.method === "GET") {
-            req.query.userID = Number(req.query.userID)
-            data = await Pipe(validate(getSchema), createGetParams, getUser, createDefaultUserIfUndefined)(req.query)
+            data = await Pipe(validate(getSchema), getUser)(req.query)
+            if (!data.Item) {
+                data = await Pipe(generateDefaultUser, validate(postSchema), createPostParams, putItem, checkError,)(req.query);
+                data.Item = unmarshall(data.params.Item)
+            }
         } else if (req.method === "PATCH") {
 
         } else if (req.method === "DELETE") {
@@ -59,15 +37,16 @@ export default async function handler(req, res) {
         } else {
             return res.status(400).json({ msg: "bad request" })
         }
-        console.log(data)
+        // console.log(data)
         return res.status(200).json({ ...data })
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
         return res.status(404).json({ err: JSON.stringify(error.message) });
     }
 }
 
-function createPostParams(param: POSTBody) {
+function createPostParams(param: userType) {
+    //comment: this method can be eliminated by using unmarshell from @aws-sdk/util-dynamodb
     const params: PutItemCommandInput = {
         TableName: process.env.DB_USER_TABLENAME || tableName,
         Item: {
@@ -85,66 +64,37 @@ function createPostParams(param: POSTBody) {
 }
 
 
-
-function createGetParams(param: GETQuery) {
-    return {
-        data: param,
-        returnedValue: {
-            TableName: process.env.DB_USER_TABLENAME || tableName,
-            Key: {
-                userID: {
-                    S: `${param.userID}`
-                }
-            },
-        }
+async function getUser(param) {
+    const params = {
+        TableName: process.env.DB_USER_TABLENAME || tableName,
+        Key: {
+            userID: {
+                S: `${param.userID}`
+            }
+        },
     }
-}
-
-async function createDefaultUserIfUndefined(param) {
-    var res = await param.returnedValue;
-    if (res.Item) { return res }
-
-    //create user: 
-    var postResponse = Pipe(generateDefaultUser, validate(postSchema), createPostParams, putItem)(param.data)
-
-    return postResponse;
-}
-
-
-function generateDefaultUser(param: userType) {
-    return {
-        userID: param.userID,
-        clubs: [],
-        tasks: [],
-        userName: param.legalName,
-        legalName: param.legalName,
-        role: [
-            "member"
-        ],
-        email: param.email,
-    }
-}
-
-function getUser(param) {
-    return { data: param.data, returnedValue: getItem(param.returnedValue) }
+    const GETResponse = await getItem(params);
+    return { param, ...GETResponse }
 }
 
 
 async function checkError(param) {
     var params = await param
-    let err = params.err
-
+    var err = params.error
     if (!err) return param;
 
-    if (err === "ConditionalCheckFailedException") {
+    if (err.message === "The conditional request failed") {
         return { err: "ConditionalCheckFailedException. api/user POST:  ConditionExpression: 'attribute_not_exists(userID)' " }
+    } else if (err.message === "No value defined: {}") {
+        console.log("user doesn't exist. creating default user.");
+        return param;
     }
-
-    console.error("unhandled err....", err)
-    return param;
+    else {
+        throw new Error(`unexpepcted error api/user/post: ${err.stack}`);
+    }
 }
 
-
+//comment: this function can be replaced by unmarshell from @aws-sdk/util-dynamodb
 function createDeleteParams(param) {
     return {
         TableName: process.env.DB_CLUB_USER_TABLENAME || tableName,
@@ -153,4 +103,16 @@ function createDeleteParams(param) {
         },
     };
 
+}
+
+
+
+type POSTBody = {
+    userID: number,
+    clubs: Array<string>,
+    tasks: Array<string>,
+    userName: string,
+    legalName: string,
+    role: Array<string>,
+    email: string
 }
