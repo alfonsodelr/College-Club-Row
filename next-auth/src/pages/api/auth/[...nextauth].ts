@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
-import axios from "axios"
-
+const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
+import { getUserProfile, userType } from "../../../utils/helper"
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
@@ -40,7 +40,7 @@ export default NextAuth({
   //              so anything you add to the JSON Web Token will be immediately available in 
   //              the session callback, like for example an access_token from a provider.
   jwt: {
-    // secret: process.env.SECRET   //default
+    secret: process.env.SECRET   //default
     //realated reading: https://next-auth.js.org/configuration/options#jwt
     // You can define your own encode/decode functions for signing and encryption
     // if you want to override the default behaviour of encrypted (JWE). We recommend you keep this behaviour.
@@ -69,59 +69,55 @@ export default NextAuth({
     // async redirect({ url, baseUrl }) { return baseUrl },
     // async session({ session, token, user }) { return session },
 
-    //read more on: https://next-auth.js.org/configuration/callbacks#jwt-callback
-    // The arguments user, account, profile and isNewUser are only passed the first time 
-    //            this callback is called on a new session, after the user signs in. In 
-    //            subsequent calls, only token will be available.
-    //create custom session object reading: 
-    //            https://vizzuality.github.io/devismos/docs/researches/next-auth/#solution
-    async jwt({ token, user, account, profile, isNewUser, session }) {
-      //1. get user portfolio from 
-      // if (user.id) {
-      //   var userPortfolio = getUser(user.id);
-      // }
-
-      //params other than token in undefined after initial login.
-      if (profile !== undefined && user !== undefined) {
-        var re = getUser({ userID: token.sub, email: token.email, legalName: token.name })
+    //   //read more on: https://next-auth.js.org/configuration/callbacks#jwt-callback
+    //   // The arguments user, account, profile and isNewUser are only passed the first time 
+    //   //            this callback is called on a new session, after the user signs in. In 
+    //   //            subsequent calls, only token will be available.
+    //   //create custom session object reading: 
+    //   //            https://vizzuality.github.io/devismos/docs/researches/next-auth/#solution
+    async jwt({ token }) {
+      try {
+        if (!token.profiles) {
+          var res = await getUserProfile({ userID: token.sub, email: token.email, legalName: token.name })
+          if (res.status !== 200) throw new Error(`[nextAuth] callbacks.jwt: getUserProfiles has status code: ${res.status}`);
+          var profiles: userType = res.data;
+          token.profiles = profiles;
+        }
+        // console.log(token)
+        //@DocumentID=12
+        return token
+      } catch (error) {
+        console.log(error)
+        return token;
       }
-      //2. add portfolio to token
+    }
+  },
 
 
+  // Events are useful for logging
+  // https://next-auth.js.org/configuration/events
+  events: {},
 
-      // //logging jwt params for development: 
-      // console.log(`token: ${JSON.stringify(token)} ,\n user: ${JSON.stringify(user)},\
-      //   \n account: ${JSON.stringify(account)} \n profile: ${JSON.stringify(profile)}\n isNewUSer: \ 
-      //    ${JSON.stringify(isNewUser)}\n session: ${JSON.stringify(session)} \n`)
-      return token
-    },
+  // // You can set the theme to 'light', 'dark' or use 'auto' to default to the
+  // // whatever prefers-color-scheme is set to in the browser. Default is 'auto'
+  theme: {
+    colorScheme: "light",
+  },
+  // Enable debug messages in the console if you are having problems
+  debug: false,
 
-    // Events are useful for logging
-    // https://next-auth.js.org/configuration/events
-    events: {},
-
-    // You can set the theme to 'light', 'dark' or use 'auto' to default to the
-    // whatever prefers-color-scheme is set to in the browser. Default is 'auto'
-    theme: {
-      colorScheme: "light",
-    },
-
-    // Enable debug messages in the console if you are having problems
-    debug: false,
-  }
 })
 
-const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
-async function getUser(userData) {
-  const res = await axios.get(baseUrl + "/api/user/", { params: { ...userData } })
-    .then(res => {
-      console.log(res);
-      return res
-    }).catch(err => { console.error(err.message) })
-
-  return true
-}
 export { }
+
+
+
+
+        //     // //logging jwt params for development: 
+        //     // console.log(`token: ${JSON.stringify(token)} ,\n user: ${JSON.stringify(user)},\
+        //     //   \n account: ${JSON.stringify(account)} \n profile: ${JSON.stringify(profile)}\n isNewUSer: \
+        //     //    ${JSON.stringify(isNewUser)}\n session: ${JSON.stringify(session)} \n`)
+        //     // console.log("token from [nextAuth] is: ", token);
 
 
 
@@ -170,6 +166,28 @@ export { }
   },
   isNewUSer: undefined,
   session: undefined
+}
+
+
+@DocumentID=12
+------------sample JWT token with user profile-----------------------
+{
+  name: 'ABUDIKERANMU YASEN',
+  email: 'yasen_abudikeranmu@student.smc.edu',
+  picture: 'https://lh3.googleusercontent.com/a-/AOh14GgihV6IVsTqVrs7dWV9sxBj3g2PgehCudZxzQ3c=s96-c',
+  sub: '104142427804075574374',
+  iat: 1643595705,
+  exp: 1646187705,
+  jti: '28a63e79-035a-455d-ad30-5c9a67a04879',
+  profiles: {
+    role: '["member"]',
+    clubs: '[]',
+    userID: '104142427804075574374',
+    userName: 'ABUDIKERANMU YASEN',
+    tasks: '[]',
+    email: '"yasen_abudikeranmu@student.smc.edu"',
+    legalName: 'ABUDIKERANMU YASEN'
+  }
 }
 
 */
