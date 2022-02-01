@@ -21,9 +21,10 @@ const updateItem = async (params: UpdateItemCommandInput) => {
     try {
         const data = await ddbClient.send(new UpdateItemCommand(params));
         console.log("Success - item added or updated", data);
-        return data;
-    } catch (err) {
-        console.log("Error", err);
+        return { ...data, params };
+    } catch (error) {
+        console.log("Error", error);
+        return { error, params }
     }
 };
 

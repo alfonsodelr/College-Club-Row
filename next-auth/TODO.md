@@ -1,6 +1,7 @@
  1/25/2022
  //TODO:
-        //5. improve api/user checkError method
+        //1. api route to update user. I will have to add officers and presidents manuelly for now. 
+        //
 
 
 
@@ -8,6 +9,8 @@
 start: 10:43 pm 1/28  
 
 1/30 start: 11:28   end: 1/31/ 00:02
+
+1/31 start 10:25pm  end: 
 
 + middleware to club route
 + filewriter helper for logging

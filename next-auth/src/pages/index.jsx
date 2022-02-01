@@ -1,7 +1,9 @@
 import React from 'react';
 import $ from "./index.module.scss"
+import Header from "../components/layouts/header"
 function index() {
   return <div>
+    <Header />
     <h1 style={{ textAlign: 'center' }}>Flex exercise</h1>
     <div className={$.container}>
       <div className={`${$.item} ${$.item1}`}>
