@@ -1,6 +1,6 @@
  1/25/2022
  //TODO:
-        //1. api route to update user. I will have to add officers and presidents manuelly for now. 
+        //1. helper function to check roles in a string seperated with @ symbol.
         //
 
 
@@ -10,15 +10,11 @@ start: 10:43 pm 1/28
 
 1/30 start: 11:28   end: 1/31/ 00:02
 
-1/31 start 10:25pm  end: 
+1/31 start 10:25pm  end: 12:58am
 
-+ middleware to club route
-+ filewriter helper for logging
-+ api param type for typescript funcitons
-+ getuser with unmarshell data
-+ @aws-sdk/util-dynamodb
-+ marshell and unmarshell with util-dynamodb
-+ debug api routes
+2/1 start 8:45am
+
+- moved unused components to olbComponents folder
 
 
 

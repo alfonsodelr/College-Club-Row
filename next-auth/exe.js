@@ -1,0 +1,1 @@
+var str = ["member@ags", "president@112", "officer@33475club"]

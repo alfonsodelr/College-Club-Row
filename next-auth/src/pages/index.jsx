@@ -1,9 +1,13 @@
 import React from 'react';
 import $ from "./index.module.scss"
 import Header from "../components/layouts/header"
+import StaticHeader from '../components/StaticHeader';
+import ClubLayout from '../components/layouts/ClubLayout';
 function index() {
   return <div>
-    <Header />
+    {/* <Header /> */}
+    {/* <StaticHeader /> */}
+    <ClubLayout></ClubLayout>
     <h1 style={{ textAlign: 'center' }}>Flex exercise</h1>
     <div className={$.container}>
       <div className={`${$.item} ${$.item1}`}>

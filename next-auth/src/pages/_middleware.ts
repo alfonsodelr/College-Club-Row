@@ -6,6 +6,16 @@ export async function middleware(req) {
 
   console.log("index middleWare index is running")
 
+  const session = await getToken({
+    req,
+    secret: process.env.SECRET,
+    secureCookie:
+      process.env.NEXTAUTH_URL?.startsWith("https://") ??
+      !!process.env.VERCEL_URL,
+  })
+
+  console.log(session)
+
   if (req.nextUrl.pathname === "/middleware-protected") {
     const session = await getToken({
       req,
@@ -15,7 +25,7 @@ export async function middleware(req) {
         !!process.env.VERCEL_URL,
     })
 
-
+    console.log(session)
     // console.log("this session is", session, "session.....")
     // You could also check for any property on the session object,
     // like role === "admin" or name === "John Doe", etc.
