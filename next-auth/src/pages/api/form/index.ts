@@ -95,37 +95,3 @@ export default async function handler(req, res) {
         return res.status(404).json({ msg: JSON.stringify(error) });
     }
 }
-
-//sample post putItem params: 
-// {"Item":{
-//     "clubID": "CLUB1232",
-//     "formID": "FORM1241",
-//     "tags": [{"a":"b"},{"c":"c"}]
-//     }}
-
-
-//sample  getitem/deleteItem params: 
-// {
-//       "clubID":"CLUB1232",
-//       "formID":"FORM1232"
-//   }
-
-
-//sample updatItem params: 
-// {
-//     "clubID": "CLUB1232",
-//     "formID": "FORM1245",
-//     "data": {
-//         "tags": [
-//             {
-//                 "a": "bb"
-//             },
-//             {
-//                 "c": "cc"
-//             }
-//         ]
-//     }
-// }
-
-
-

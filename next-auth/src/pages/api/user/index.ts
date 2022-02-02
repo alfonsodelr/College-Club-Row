@@ -9,7 +9,7 @@ import { PutItemCommandInput, } from "@aws-sdk/client-dynamodb";
 import { ajv } from "../../../utils/validation"
 import { ValidateFunction } from 'ajv'
 import { Pipe, Tap, generateDefaultUser, userType } from "../../../utils/helper";
-import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 
 const tableName = process.env.DB_USER_TABLENAME;
@@ -46,18 +46,9 @@ export default async function handler(req, res) {
 }
 
 function createPostParams(param: userType) {
-    //comment: this method can be eliminated by using unmarshell from @aws-sdk/util-dynamodb
     const params: PutItemCommandInput = {
         TableName: process.env.DB_USER_TABLENAME || tableName,
-        Item: {
-            userID: { S: `${param.userID}` },
-            legalName: { S: param.legalName },
-            userName: { S: param.userName || "" },
-            clubs: { S: JSON.stringify(param.clubs) || "" },
-            tasks: { S: JSON.stringify(param.tasks) || "" },
-            role: { S: JSON.stringify(param.role) || "" },
-            email: { S: JSON.stringify(param.email) || "" }
-        },
+        Item: marshall({ ...param }),
         ConditionExpression: 'attribute_not_exists(userID)' //throws: ConditionalCheckFailedException if userID is already exist
     };
     return params
