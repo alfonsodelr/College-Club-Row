@@ -6,7 +6,7 @@ import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, Delet
 import { ajv } from "../../../utils/validation"
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { ValidateFunction } from "ajv";
-import { Pipe } from "../../../utils/helper";
+import { Pipe, validateRole } from "../../../utils/helper";
 
 
 const validatePost = ajv.getSchema("api_club_post_schema");
@@ -19,7 +19,6 @@ export default async function handler(req, res) {
     var data: any = "";
     try {
         if (req.method === 'POST') {
-
             if (!validatePost(req.body)) throw new Error("api/club/index.ts --post: invalid Param");
             data = marshall(req.body);
             const params: PutItemCommandInput = {
@@ -41,33 +40,7 @@ export default async function handler(req, res) {
             // return res.status(200).json({ data: "" })
 
         } else if (req.method === "PATCH") {
-            data = Pipe(validate(patchSchema),)(req.body)// generateUpdateParam, updateItem
-            let dataKey = req.body.key;
-            let dataValue = req.body.value;
-            let dataAction = req.body.action;
-
-            if (dataAction === "list_append") {
-                const params: UpdateItemCommandInput = {
-                    TableName: process.env.DB_CLUB_TABLENAME,
-                    Key: {
-                        clubID: { S: req.body.clubID },
-                    },
-                    UpdateExpression: `SET #key = list_append(#key, :i)`,
-                    ExpressionAttributeNames: { "#key": `${dataKey}` },
-                    ExpressionAttributeValues: {
-                        ":i": {
-                            "L": [
-                                { "S": `${dataValue}` },
-                            ]
-                        },
-                    },
-                    ReturnValues: "ALL_NEW"
-                };
-
-                data = await updateItem(params)
-                // data = params;
-            }
-
+            data = await Pipe(validate(patchSchema), generateUpdateParam, update)(req.body)// generateUpdateParam, updateItem
 
         } else if (req.method === "DELETE") {
 
@@ -83,7 +56,70 @@ export default async function handler(req, res) {
 }
 
 
-function generateUpdateParam(params: UpdateItemCommandInput) {
+function generateUpdateParam(body) {
+    let dataAction = body.action;
 
-    return params;
+    if (dataAction === "append_role") {
+        let dataKey = body.key;
+        let dataValue = body.value;
+        let userRole = validateRole(body.key.slice(0, -1))
+
+        const club_params: UpdateItemCommandInput = {
+            TableName: process.env.DB_CLUB_TABLENAME,
+            Key: {
+                clubID: { S: body.clubID },
+            },
+            UpdateExpression: `SET #key = list_append(#key, :i)`,
+            ExpressionAttributeNames: { "#key": `${dataKey}` },
+            ExpressionAttributeValues: {
+                ":i": {
+                    "L": [
+                        { "S": `${dataValue}` },
+                    ]
+                },
+            },
+            ReturnValues: "ALL_NEW"
+        };
+
+        const user_params: UpdateItemCommandInput = {
+            TableName: process.env.DB_USER_TABLENAME,
+            Key: {
+                userID: { S: body.value }, //since body.value is userID wich will be stored in club.members[]
+            },
+            UpdateExpression: `SET #key = list_append(#key, :i)`,
+            ExpressionAttributeNames: { "#key": `role` },
+            ExpressionAttributeValues: {
+                ":i": {
+                    "L": [
+                        { "S": `${userRole}@${body.clubID}` },
+                    ]
+                },
+            },
+            ReturnValues: "ALL_NEW"
+        };
+        //["member@body.clubID"]
+
+
+        // data = await updateItem(params)
+        // data = params;
+        return { ...body, club_params, user_params };
+    }
+
+    throw new Error("api/club generateUpdateParam action not found");
+}
+
+async function update(body) {
+    if (body.action === "append_role") {
+        var responses = { body };
+        var clubResponse = await updateItem(body.club_params);
+        var userResponse = await updateItem(body.user_params);
+        if (clubResponse['$metadata'].httpStatusCode === 200 && userResponse['$metadata'].httpStatusCode === 200) {
+            return { ...body, clubResponse, userResponse }
+        } else {
+            throw new Error("api/club Update response status != 200.\n" + clubResponse + userResponse);
+
+        }
+    }
+
+    throw new Error("api/club UPdate action not found");
 }
