@@ -61,5 +61,11 @@ type generateDefaultUserType = {
     legalName: string,
 }
 
-export { varNameGenerator, Tap, Pipe, getUserProfile, generateDefaultUser, urlCleaner }
+function validateRole(role: string) {
+    const roles = ["member", "officer", "president", "adviser"]
+    if (roles.includes(role)) return role;
+    throw new Error("ValidateRole Error: role is not valid.");
+}
+
+export { varNameGenerator, Tap, Pipe, getUserProfile, generateDefaultUser, urlCleaner, validateRole }
 export type { userType }
