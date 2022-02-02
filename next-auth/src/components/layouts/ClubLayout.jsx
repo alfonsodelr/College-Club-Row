@@ -6,6 +6,7 @@ import React from 'react';
 
 */
 
+//MUI components
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,9 +19,11 @@ import Container from '@mui/material/Container';
 // import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import Link from 'next/link';
+import { urlCleaner } from '../../utils/helper'
 
 
-const ClubLayout = ({ title = "Club Title", pages = ['Products', 'Pricing', 'Blog'], }) => {
+const ClubLayout = ({ children, title = "Club Title", pages = ['products', 'pricing', 'blog'], }) => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
 
     const handleOpenNavMenu = (event) => {
@@ -31,91 +34,114 @@ const ClubLayout = ({ title = "Club Title", pages = ['Products', 'Pricing', 'Blo
     };
 
     const handleMenuItemClick = (event, index) => {
-        console.log("item click handler", pages[index])
+        console.log("item click handler", pages[index]);
     }
 
     return (
-        <AppBar position="static">
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    {/* ----------screen size md------------ */}
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-                    >
-                        {title}
-                    </Typography>
-
-
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, }}>
-                        {pages.map((page, index) => (
-                            <Button
-                                key={page}
-                                onClick={(event) => handleMenuItemClick(event, index)}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
-                        ))}
-                    </Box>
-
-
-                    {/* ----------screen size xs------------ */}
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
+        <>
+            <AppBar position="static">
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters>
+                        {/* ----------screen size md------------ */}
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
                         >
-                            <MenuIcon />
-                        </IconButton>
+                            {title}
+                        </Typography>
 
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
-                        >
+
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, }}>
                             {pages.map((page, index) => (
-                                <MenuItem key={page} onClick={(event) => handleMenuItemClick(event, index)} >
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
+                                <Link href={urlCleaner(`/club/${title}/${page}`)} passHref>
+                                    <Button
+                                        key={page}
+                                        onClick={(event) => handleMenuItemClick(event, index)}
+                                        sx={{ my: 2, color: 'white', display: 'block' }}
+                                    >
+                                        {page}
+                                    </Button>
+                                </Link>
                             ))}
-                        </Menu>
-                    </Box>
+                        </Box>
+
+
+                        {/* ----------screen size xs------------ */}
+                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleOpenNavMenu}
+                                color="inherit"
+                            >
+                                <MenuIcon />
+                            </IconButton>
+
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorElNav}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                open={Boolean(anchorElNav)}
+                                onClose={handleCloseNavMenu}
+                                sx={{
+                                    display: { xs: 'block', md: 'none' },
+                                }}
+                            >
+
+                                {/* <Link href={urlCleaner(`/club/${title}/${page}`)} passHref>
+                                    <Button
+                                        key={page}
+                                        onClick={(event) => handleMenuItemClick(event, index)}
+                                        sx={{ my: 2, color: 'white', display: 'block' }}
+                                    >
+                                        {page}
+                                    </Button>
+                                </Link> */}
+
+                                {pages.map((page, index) => (
+                                    <Link href={urlCleaner(`/club/${title}/${page}`)} passHref>
+                                        <MenuItem key={page} onClick={(event) => handleMenuItemClick(event, index)} >
+                                            <Typography textAlign="center">{page}</Typography>
+                                        </MenuItem>
+                                    </Link>
+                                ))}
+                            </Menu>
+                        </Box>
+
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+                        >
+                            {title}
+                        </Typography>
+
+                        <Button color="inherit">Signout</Button>
+
+                    </Toolbar>
+                </Container>
+            </AppBar >
+
+            {children}
+
+            {/* maybe some footer here */}
+        </>
 
 
 
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-                    >
-                        {title}
-                    </Typography>
-
-
-                </Toolbar>
-            </Container>
-        </AppBar >
     );
 };
 export default ClubLayout;

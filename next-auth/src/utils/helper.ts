@@ -33,6 +33,11 @@ const Tap = (fn = console.log) => x => (fn(x), x);
 const Pipe = (...fns) => fns.reduce((result, f) => (...args) => f(result(...args)));
 
 
+function urlCleaner(str) {
+    if (typeof str !== 'string') return "urlCleaner: str must be a string."
+    var url = str.replace(/[^a-zA-Z0-9/]/g, "");
+    return url.toLowerCase();
+}
 
 async function getUserProfile(userData: GetUserParamType) {
     const res = await axios.get(baseUrl + "/api/user/", { params: { ...userData } })
@@ -56,5 +61,5 @@ type generateDefaultUserType = {
     legalName: string,
 }
 
-export { varNameGenerator, Tap, Pipe, getUserProfile, generateDefaultUser }
+export { varNameGenerator, Tap, Pipe, getUserProfile, generateDefaultUser, urlCleaner }
 export type { userType }
