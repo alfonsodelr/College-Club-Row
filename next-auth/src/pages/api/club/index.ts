@@ -4,7 +4,7 @@ import { updateItem } from "../../../../libs/ddb_updateitem";
 import { deleteItem } from "../../../../libs/ddb_deleteitem"
 import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, DeleteItemCommandInput } from "@aws-sdk/client-dynamodb";
 import { ajv } from "../../../utils/validation"
-
+import { marshall } from "@aws-sdk/util-dynamodb";
 
 const validatePost = ajv.getSchema("api_club_post_schema");
 const validateGet = ajv.getSchema("api_club_get_schema");
@@ -14,16 +14,12 @@ export default async function handler(req, res) {
     var data: any = "";
     try {
         if (req.method === 'POST') {
+
             if (!validatePost(req.body)) throw new Error("api/club/index.ts --post: invalid Param");
-            const { clubID, clubName } = req.body;
-            const formID = req.body.formID || "";
+            data = marshall(req.body);
             const params: PutItemCommandInput = {
                 TableName: process.env.DB_CLUB_TABLENAME,
-                Item: {
-                    clubID: { S: clubID },
-                    clubName: { S: clubName },
-                    formID: { S: formID },
-                }
+                Item: { ...data }
             };
             data = await putItem(params)
         } else if (req.method === "GET") {
@@ -46,7 +42,7 @@ export default async function handler(req, res) {
         } else {
             return res.status(400).json({ msg: "bad request" })
         }
-
+        // return res.status(200).json({ ...data })
         return res.status(data['$metadata'].httpStatusCode).json({ ...data })
     } catch (error) {
         console.log(error)
