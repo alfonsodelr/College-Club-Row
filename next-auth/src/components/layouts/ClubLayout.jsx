@@ -99,17 +99,6 @@ const ClubLayout = ({ children, title = "Club Title", pages = ['products', 'pric
                                     display: { xs: 'block', md: 'none' },
                                 }}
                             >
-
-                                {/* <Link href={urlCleaner(`/club/${title}/${page}`)} passHref>
-                                    <Button
-                                        key={page}
-                                        onClick={(event) => handleMenuItemClick(event, index)}
-                                        sx={{ my: 2, color: 'white', display: 'block' }}
-                                    >
-                                        {page}
-                                    </Button>
-                                </Link> */}
-
                                 {pages.map((page, index) => (
                                     <Link href={urlCleaner(`/club/${title}/${page}`)} passHref>
                                         <MenuItem key={page} onClick={(event) => handleMenuItemClick(event, index)} >

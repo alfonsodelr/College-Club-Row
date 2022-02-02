@@ -134,6 +134,20 @@ const api_user_role_post_schema = {
     },
     required: ["userID", "role"],
 }
+
+const api_club_patch_schema = {
+    type: "object",
+    properties: {
+        clubID: { type: "string" },
+        key: { type: "string" },
+        value: { type: "string" },
+        action: { type: "string" }
+    },
+    required: ["clubID", "key", "value", "action"],
+    maxProperties: 4,
+}
+
+
 export {
     api_form_get_schema,
     api_form_post_schema,
@@ -145,4 +159,5 @@ export {
     api_user_get_schema,
     api_user_delete_schema,
     api_user_role_post_schema,
+    api_club_patch_schema
 }

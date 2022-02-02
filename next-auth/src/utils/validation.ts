@@ -31,7 +31,10 @@ ajv.addSchema(schem.api_user_delete_schema, "api_user_delete_schema");
 ajv.getSchema("api_user_delete_schema")
 
 ajv.addSchema(schem.api_user_role_post_schema, "api_user_role_post_schema");
-ajv.getSchema("api_user_role_post_schema")
+ajv.getSchema("api_user_role_post_schema");
+
+ajv.addSchema(schem.api_club_patch_schema, "api_club_patch_schema");
+ajv.getSchema("api_club_patch_schema");
 
 export { ajv }
 
