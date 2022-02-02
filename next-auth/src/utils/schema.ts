@@ -63,8 +63,12 @@ const api_club_post_schema = {
     type: "object",
     properties: {
         clubID: { type: "string" },
+        clubName: { type: "string" },
         formID: { type: "string" },
-        clubName: { type: "string" }
+        officers: {
+            type: "array", items: { type: "string" },
+        },
+        members: { type: "array", items: { type: "string" } }
     },
     minProperties: 2,
     required: ["clubID", "clubName"],
