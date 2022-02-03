@@ -12,10 +12,12 @@ start: 10:43 pm 1/28
 
 1/31 start 10:25pm  end: 12:58am
 
-2/1 start 8:45am
+2/1 start 8:45am  end 12:25am  1 hr lunch break. 
 
-- moved unused components to olbComponents folder
+2/2 start 6:27pm  end 11:58pm
 
+
+2/3 start: 9:47am
 
 
 
