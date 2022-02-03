@@ -3,8 +3,9 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 const REGION = "REGION"; //e.g. "us-east-1"
 // Create an Amazon DynamoDB service client object.
 const ddbClient = new DynamoDBClient({
-    accessKeyId: process.env.ACCESS_KEY,
-    secretAccessKey: process.env.SECRET_KEY,
+    // accessKeyId: process.env.ACCESS_KEY,
+    // secretAccessKey: process.env.SECRET_KEY,
     region: process.env.REGION,
+    endpoint: "http://localhost:8000",
 });
 export { ddbClient };

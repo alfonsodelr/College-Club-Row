@@ -1,16 +1,10 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
-interface dbClientparams {
-    accessKeyId: string,
-    secretAccessKey: string,
-    region: string,
-
-}
-
-const credencials: dbClientparams = {
-    accessKeyId: process.env.ACCESS_KEY,
-    secretAccessKey: process.env.SECRET_KEY,
+const credencials = {
+    // accessKeyId: process.env.ACCESS_KEY,
+    // secretAccessKey: process.env.SECRET_KEY,
     region: process.env.REGION,
+    endpoint: "http://localhost:8000",
 }
 
 // Create an Amazon DynamoDB service client object.
