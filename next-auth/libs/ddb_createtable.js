@@ -1,38 +1,8 @@
 // Import required AWS SDK clients and commands for Node.js
 import { CreateTableCommand } from "@aws-sdk/client-dynamodb";
 // import { ddbClient } from "./libs/ddbClient.js";
-import { ddbClient } from "./ddbClient";
-
-export const params = {
-    AttributeDefinitions: [
-        {
-            AttributeName: "clubID",
-            AttributeType: "N",
-        },
-        {
-            AttributeName: "formID",
-            AttributeType: "N",
-        },
-    ],
-    KeySchema: [
-        {
-            AttributeName: "clubID",
-            KeyType: "HASH",
-        },
-        {
-            AttributeName: "formID",
-            KeyType: "RANGE",
-        },
-    ],
-    ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1,
-    },
-    TableName: "CCR-club-form",
-    StreamSpecification: {
-        StreamEnabled: false,
-    },
-};
+// import { ddbClient } from "./ddbClient";
+import { ddbClient } from "./ddbClient.js";
 
 
 function paramKeyFilter(params) {
@@ -52,7 +22,6 @@ function paramKeyFilter(params) {
     }
 }
 
-//this create table funciton has not been tested or ran yet.
 export const ddb_createTable = async (params) => {
     try {
         paramKeyFilter(params);
@@ -63,4 +32,3 @@ export const ddb_createTable = async (params) => {
         console.log("Error", err);
     }
 };
-
