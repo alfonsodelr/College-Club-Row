@@ -7,7 +7,7 @@ function index() {
   return <div>
     {/* <Header /> */}
     {/* <StaticHeader /> */}
-    <ClubLayout></ClubLayout>
+    <ClubLayout title='Main Page'></ClubLayout>
     <h1 style={{ textAlign: 'center' }}>Flex exercise</h1>
     <div className={$.container}>
       <div className={`${$.item} ${$.item1}`}>

@@ -40,13 +40,8 @@ async function handler(req, res) {
 
             res.cookie('clubGetCookie', 'api-yayayayaya!')
             // Return the `set-cookie` header so we can display it in the browser and show that it works!
-            res.end(res.getHeader('Set-Cookie'))
         } else if (req.method === "PATCH") {
-
-            // return res.status(200).json({ data: "" })
-
-        } else if (req.method === "PATCH") {
-            data = await Pipe(validate(patchSchema), generateUpdateParam, update)(req.body)// generateUpdateParam, updateItem
+            data = await Pipe(validate(patchSchema), generateUpdateParam, update)(req.body)
 
         } else if (req.method === "DELETE") {
 
@@ -119,14 +114,12 @@ function generateUpdateParam(body) {
 
 async function update(body) {
     if (body.action === "append_role") {
-        var responses = { body };
         var clubResponse = await updateItem(body.club_params);
         var userResponse = await updateItem(body.user_params);
         if (clubResponse['$metadata'].httpStatusCode === 200 && userResponse['$metadata'].httpStatusCode === 200) {
             return { ...body, clubResponse, userResponse }
         } else {
             throw new Error("api/club Update response status != 200.\n" + clubResponse + userResponse);
-
         }
     }
 

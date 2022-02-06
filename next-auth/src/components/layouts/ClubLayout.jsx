@@ -1,8 +1,6 @@
 import React from 'react';
 
 /* ---------------TODO------------------
-1. create header
-2. create footer
 
 */
 
@@ -55,9 +53,9 @@ const ClubLayout = ({ children, title = "Club Title", pages = ['products', 'pric
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, }}>
                             {pages.map((page, index) => (
-                                <Link href={urlCleaner(`/club/${title}/${page}`)} passHref>
+                                <Link key={index + page} href={urlCleaner(`/club/${title}/${page}`)} passHref>
                                     <Button
-                                        key={page}
+
                                         onClick={(event) => handleMenuItemClick(event, index)}
                                         sx={{ my: 2, color: 'white', display: 'block' }}
                                     >
@@ -100,7 +98,7 @@ const ClubLayout = ({ children, title = "Club Title", pages = ['products', 'pric
                                 }}
                             >
                                 {pages.map((page, index) => (
-                                    <Link href={urlCleaner(`/club/${title}/${page}`)} passHref>
+                                    <Link key={index + page} href={urlCleaner(`/club/${title}/${page}`)} passHref>
                                         <MenuItem key={page} onClick={(event) => handleMenuItemClick(event, index)} >
                                             <Typography textAlign="center">{page}</Typography>
                                         </MenuItem>
@@ -118,7 +116,25 @@ const ClubLayout = ({ children, title = "Club Title", pages = ['products', 'pric
                             {title}
                         </Typography>
 
-                        <Button color="inherit">Signout</Button>
+                        <Link href={`/api/auth/signout`}
+                            onClick={(e) => {
+                                e.preventDefault()
+                                signOut()
+                            }}>
+                            <Button color="inherit">Signout</Button>
+                        </Link>
+
+
+                        {/* <a
+                            href={`/api/auth/signout`}
+                            className={styles.button}
+                            onClick={(e) => {
+                                e.preventDefault()
+                                signOut()
+                            }}
+                        >
+                            Sign out
+                        </a> */}
 
                     </Toolbar>
                 </Container>
