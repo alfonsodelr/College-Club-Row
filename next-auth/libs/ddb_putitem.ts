@@ -1,6 +1,6 @@
 // Import required AWS SDK clients and commands for Node.js
 import { PutItemCommand, PutItemCommandInput } from "@aws-sdk/client-dynamodb";
-import { ddbClient } from "./ddbClient";
+import { ddbClient } from "./ddbClient.js";
 
 const putItem = async (params: PutItemCommandInput) => {
     try {
