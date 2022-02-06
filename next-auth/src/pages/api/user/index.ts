@@ -79,6 +79,9 @@ async function checkError(param) {
     } else if (err.message === "No value defined: {}") {
         console.log("user doesn't exist. creating default user.");
         return param;
+    } else if (err.message === "ResourceNotFoundException") {
+        throw new Error("api/user, ResourceNotFoundException. Check if you have required data tables.");
+
     }
     else {
         throw new Error(`unexpepcted error api/user/post: ${err.stack}`);
