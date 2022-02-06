@@ -17,8 +17,9 @@ start: 10:43 pm 1/28
 2/2 start 6:27pm  end 11:58pm
 
 
-2/3 start: 9:47am
+2/3 start: 9:47am end 12:10 am. 1hr lunch
 
+2/6 start 9:45am 
 
 
 

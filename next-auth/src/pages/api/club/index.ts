@@ -7,7 +7,7 @@ import { ajv } from "../../../utils/validation"
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { ValidateFunction } from "ajv";
 import { Pipe, validateRole } from "../../../utils/helper";
-
+import cookies from "../../../utils/cookies.js"
 
 const validatePost = ajv.getSchema("api_club_post_schema");
 const validateGet = ajv.getSchema("api_club_get_schema");
@@ -15,7 +15,7 @@ const patchSchema = ajv.getSchema("api_club_patch_schema");
 const validate = (fn: ValidateFunction) => (data: Object) => { if (!fn(data)) throw new Error("api/club/: Invalid_Param"); return data }
 
 
-export default async function handler(req, res) {
+async function handler(req, res) {
     var data: any = "";
     try {
         if (req.method === 'POST') {
@@ -37,6 +37,12 @@ export default async function handler(req, res) {
                 },
             }
             data = await getItem(params);
+
+            res.cookie('clubGetCookie', 'api-yayayayaya!')
+            // Return the `set-cookie` header so we can display it in the browser and show that it works!
+            res.end(res.getHeader('Set-Cookie'))
+        } else if (req.method === "PATCH") {
+
             // return res.status(200).json({ data: "" })
 
         } else if (req.method === "PATCH") {
@@ -54,6 +60,9 @@ export default async function handler(req, res) {
         return res.status(404).json({ msg: JSON.stringify(error) });
     }
 }
+
+
+export default cookies(handler)
 
 
 function generateUpdateParam(body) {
