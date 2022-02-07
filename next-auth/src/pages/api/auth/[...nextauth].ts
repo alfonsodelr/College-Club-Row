@@ -1,3 +1,4 @@
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
@@ -80,8 +81,8 @@ export default NextAuth({
         if (!token.profiles) {
           var res = await getUserProfile({ userID: token.sub, email: token.email, legalName: token.name })
           if (res.status !== 200) throw new Error(`[nextAuth] callbacks.jwt: getUserProfiles has status code: ${res.status}`);
-          var profiles: userType = res.data;
-          token.profiles = profiles;
+          var profiles: any = res.data;
+          token.profiles = unmarshall(profiles);
         }
         // console.log(token)
         //@DocumentID=12
