@@ -61,11 +61,69 @@ type generateDefaultUserType = {
     legalName: string,
 }
 
+
+/*!
+ * @desc  Checks if a role is valid 
+ * @param  {role:string}   role to validate.
+ * @return {role|Error}    role string or and error.
+ */
 function validateRole(role: string) {
-    const roles = ["member", "officer", "president", "adviser"]
+    const roles = Object.freeze(["member", "officer", "president", "adviser"])
     if (roles.includes(role)) return role;
     throw new Error("ValidateRole Error: role is not valid.");
 }
 
-export { varNameGenerator, Tap, Pipe, getUserProfile, generateDefaultUser, urlCleaner, validateRole }
-export type { userType }
+/*!
+ * @desc  Validates Role for /club pages
+ * @param  {role:string}   role to validate.
+ * @return {role|Error}    role string or and error.
+ */
+function validateRole_club(role: string) {
+    const roles = Object.freeze(["officer", "president", "adviser"])
+    if (roles.includes(role)) return role;
+    throw new Error("ValidateRole_club Error: club role is not valid.");
+}
+
+
+
+/*!
+ * @desc  gets club role from user profiles.role array.
+ * @param  {role:Array<string>}   role array.
+ * @return {role, numOfRole}    roles and number of club roles a user have.
+ */
+function getClubRoleFromSession(roleArr: Array<string>) {
+    if (roleArr.constructor.name !== "Array") return { error: "getClubRoleFromSession: params is invalid." }
+    var clubID: string;
+    var rol: Array<Array<string>> = [];
+    var numOfRole: number = 0;
+
+    roleArr.forEach(role => {
+        if (role === "member") return;
+        if (/member|officer|president|/gm.test(role)) {
+            rol.push(role.split("@"));
+            numOfRole += 1;
+        }
+    });
+    return { role: rol, numOfRole };
+}
+
+
+function getClubName(clubID: number) {
+    const clublist = { 111: "ags" }
+    if (clublist[clubID]) return clublist[clubID];
+    return false;
+}
+
+export {
+    varNameGenerator,
+    Tap,
+    Pipe,
+    getUserProfile,
+    generateDefaultUser,
+    urlCleaner,
+    validateRole,
+    getClubRoleFromSession,
+    validateRole_club,
+    getClubName,
+}
+export type { userType } //I should export types from ./shcema.ts only.!!!! fix later

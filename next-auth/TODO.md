@@ -1,7 +1,9 @@
  1/25/2022
  //TODO:
-        //1. helper function to check roles in a string seperated with @ symbol.
-        //
+        1. add ags middle-ware
+        2. get club data and set cookies if not exist 
+        3. store data to cookie related club.
+        
 
 
 
@@ -25,13 +27,6 @@ start: 10:43 pm 1/28
 
 
 ------------------------fix later----------------------------
-
-api/user/index.ts; getUser():  this can be cleaned up later since I returned the param itself from getItem() 
- api endpoints can be improved by using dynamoDB marshell() and unmarshell()
-
-
-
-----------------------------Documentation------------------------
-TotalID count: 12
-
-@DocumentID=12 : means specific docuemtns are written at Document=12 tag. 
+1. can I get the club profile with the user togather if the user have a club position?
+2. create typescript types that has type of 'any'
+3. officers who has role in more that one club, should be given which club to sign in as.

@@ -148,6 +148,28 @@ const api_club_patch_schema = {
 }
 
 
+type sessionType = {
+    name: string,
+    email: string,
+    picture: string,
+    sub: string,
+    profiles: {
+        role: Array<string>,
+        clubs: Array<string>,
+        userID: string,
+        tasks: Array<string>,
+        userName: string,
+        email: string,
+        legalName: string
+    },
+    iat: number,
+    exp: number,
+    jti: string,
+}
+
+
+
+
 export {
     api_form_get_schema,
     api_form_post_schema,
@@ -161,3 +183,5 @@ export {
     api_user_role_post_schema,
     api_club_patch_schema
 }
+
+export type { sessionType }
