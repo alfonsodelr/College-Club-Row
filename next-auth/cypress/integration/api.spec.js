@@ -68,8 +68,6 @@ describe('api/form', () => {
         return cy.request('DELETE', 'api/form', { ...body })
     }
 
-
-
     it('posts forms', () => {
         sampleForm01.forEach((form, index) => {
             cy.request('POST', '/api/form', form).then((response) => {
@@ -99,19 +97,20 @@ describe('api/form', () => {
 
     });
 
-    it.skip('deletes a form', () => {
-
-    });
-
-
     it.skip('updates a form', () => {
 
     });
 
+    it.skip('deletes a forms', () => {
+        reset();
+    });
+
     after(() => {
-        reset()
+        // reset()
     })
 });
+
+
 
 
 //     it('posts a user',  () => {

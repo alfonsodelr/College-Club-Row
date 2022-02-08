@@ -73,8 +73,8 @@ function generateUpdateParam(body) {
     let dataAction = body.action;
 
     if (dataAction === "append_role") {
-        let dataKey = body.key;
-        let dataValue = body.value;
+        let dataKey = body.key; //role to update
+        let dataValue = body.value;//id of the user who will get the role
         let userRole = validateRole(body.key.slice(0, -1))
 
         const club_params: UpdateItemCommandInput = {
@@ -110,17 +110,12 @@ function generateUpdateParam(body) {
             },
             ReturnValues: "ALL_NEW"
         };
-        //["member@body.clubID"]
 
-
-        // data = await updateItem(params)
-        // data = params;
         return { ...body, club_params, user_params };
     } else if (dataAction === 'update') {
         let dataKey = body.key;
         let dataValue = body.value;
         let clubID = body.clubID
-
         const params: UpdateItemCommandInput = {
             TableName: process.env.DB_CLUB_TABLENAME,
             Key: {
@@ -129,13 +124,10 @@ function generateUpdateParam(body) {
             UpdateExpression: `set #key = :i`,
             ExpressionAttributeNames: { "#key": `${dataKey}` },
             ExpressionAttributeValues: {
-                ":i": { S: JSON.stringify(dataValue) },
+                ":i": { S: dataValue },
             },
-            ReturnValues: "ALL_NEW"
         };
 
-        // data = await updateItem(params)
-        // data = params;
         return { ...body, params };
     }
 
@@ -147,13 +139,17 @@ async function updateClub(body) {
         var clubResponse = await updateItem(body.club_params);
         var userResponse = await updateItem(body.user_params);
         if (clubResponse['$metadata']?.httpStatusCode === 200 && userResponse['$metadata']?.httpStatusCode === 200) {
-            return { ...body, clubResponse, userResponse }
+            delete body.club_params;
+            delete body.user_params;
+            return { ...body, clubResponse: clubResponse['$metadata'], userResponse: userResponse['$metadata'] }
         }
         throw new Error("api/club Update append_role action response status != 200.\n" + clubResponse + userResponse);
 
     } else if (body.action === "update") {
         var updateResponse = await updateItem(body.params);
         if (updateResponse['$metadata']?.httpStatusCode === 200) {
+            delete body?.params;
+            delete updateResponse?.params
             return { ...body, updateResponse }
         }
         throw new Error("api/club Update update action response status != 200.\n" + updateResponse);
