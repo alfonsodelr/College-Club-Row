@@ -1,8 +1,5 @@
-import React from 'react';
-
-/* ---------------TODO------------------
-
-*/
+import { React, useState, useEffect } from 'react';
+import Cookies from 'js-cookie'
 
 //MUI components
 import AppBar from '@mui/material/AppBar';
@@ -13,17 +10,24 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-// import Avatar from '@mui/material/Avatar';
-// import Tooltip from '@mui/material/Tooltip';
+// import Tooltip from '@mui/material/Tooltip'; //tootip to explain tools on appBar.
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import { urlCleaner } from '../../utils/helper'
 
 
-const ClubLayout = ({ children, title = "Club Title", pages = ['products', 'pricing', 'blog'], }) => {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
+/* ---------------TODO------------------
 
+*/
+
+const ClubLayout = ({ clubInfo, children, pages = ['products', 'pricing', 'blog'], }) => {
+    const title = clubInfo.name;
+    useEffect(() => {
+        Cookies.set('club', `${clubInfo}`)
+    }, []);
+
+    const [anchorElNav, setAnchorElNav] = useState(null);  //!!!!! I think this is useless?? check later --yasen
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
