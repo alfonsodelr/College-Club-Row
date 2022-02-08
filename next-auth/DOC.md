@@ -10,3 +10,10 @@ Description: this file should work as a temporary documentation file.
 2. user 'docker run --name mydynamo -p 8000:8000 amazon/dynamodb-local' to run local db.
 
 3. run database contaier by:  docker-compose up -d dynamodb && docker logs -f my-dynamodb
+
+4. every functions or class should be created with template:
+                                                    /*!
+                                                    * @desc  object description
+                                                    * @param  {} required params   
+                                                    * @return {} expected return value   
+                                                    */

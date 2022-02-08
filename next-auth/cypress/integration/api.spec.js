@@ -3,7 +3,7 @@
 import { putItem } from "../../libs/ddb_putitem.ts"
 import { getItem } from "../../libs/ddb_getitem.ts"
 import { ddbClient } from "../../libs/ddbClient.js"
-import { sampleUsers } from "./seed.js"
+import { sampleUsers, sampleForm01 } from "./seed.js"
 // // cy.request('https://jsonplaceholder.typicode.com/comments').then((response) => {
 // //   expect(response.status).to.eq(200)
 // //   expect(response.body).to.have.length(500)
@@ -15,8 +15,6 @@ import { GetItemCommand, GetItemCommandInput, } from "@aws-sdk/client-dynamodb";
 
 // @ts-check
 describe('api/user', () => {
-
-
     const reset = () => {
         sampleUsers.forEach(user => { deleteUser(user.userID) })
     }
@@ -24,7 +22,6 @@ describe('api/user', () => {
     const deleteUser = (body) => {
         return cy.request('DELETE', 'api/user', { userID: body })
     }
-
 
     const getUser = (query) => {
         return cy.request({
@@ -37,7 +34,7 @@ describe('api/user', () => {
 
     afterEach(reset)
 
-    it('posts a user', () => {
+    it('posts users', () => {
         var user0 = sampleUsers[2];
         cy.request('POST', '/api/user', user0).then((response) => {
             expect(response.status).to.eq(200)
@@ -59,11 +56,62 @@ describe('api/user', () => {
         })
         deleteUser(userID)
     })
-
-
 })
 
+describe('api/form', () => {
 
+    const reset = () => {
+        sampleForm01.forEach(form => { deleteForm({ clubID: form.clubID, formID: form.formID }) })
+    }
+
+    const deleteForm = (body) => {
+        return cy.request('DELETE', 'api/form', { ...body })
+    }
+
+
+
+    it('posts forms', () => {
+        sampleForm01.forEach((form, index) => {
+            cy.request('POST', '/api/form', form).then((response) => {
+                expect(response.status).to.eq(200)
+                expect(response.body).to.have.property("clubID")
+                expect(response.body).to.have.property("formID")
+                expect(response.body).to.have.property("$metadata")
+            })
+        })
+    });
+
+    it('gets forms', () => {
+        sampleForm01.forEach((form, index) => {
+            cy.request({
+                method: 'GET',
+                url: '/api/form',
+                form: true,
+                qs: { clubID: form.clubID, formID: form.formID },
+            }).then((response) => {
+                expect(response.status).to.eq(200)
+                expect(response.body).to.have.property("clubID")
+                expect(response.body).to.have.property("formID")
+                expect(response.body).to.have.property("$metadata")
+                expect(response.body).to.have.nested.property("Item.tags")
+            })
+        })
+
+    });
+
+    it.skip('deletes a form', () => {
+
+    });
+
+
+    it.skip('updates a form', () => {
+
+    });
+
+    after(() => {
+        reset()
+    })
+});
 
 
 //     it('posts a user',  () => {
