@@ -22,21 +22,16 @@ const api_form_delete_schema = {
 const api_form_post_schema = {
     type: "object",
     properties: {
-        Item: {
-            type: "object",
-            properties: {
-                clubID: { type: "string" },
-                formID: { type: "string" },
-                tags: {
-                    type: "array",
-                    items: { type: "object" },
-                    minItems: 1,
-                },
-            },
-            maxProperties: 3,
-            required: ["clubID", "formID", "tags"],
-        }
+        clubID: { type: "string" },
+        formID: { type: "string" },
+        tags: {
+            type: "array",
+            items: { type: "object" },
+            minItems: 1,
+        },
     },
+    maxProperties: 3,
+    required: ["clubID", "formID", "tags"],
 }
 
 
