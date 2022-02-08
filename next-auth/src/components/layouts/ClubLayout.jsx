@@ -15,19 +15,36 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import { urlCleaner } from '../../utils/helper'
-
+import { useRouter } from 'next/router';
 
 /* ---------------TODO------------------
 
 */
 
-const ClubLayout = ({ clubInfo, children, pages = ['products', 'pricing', 'blog'], }) => {
-    const title = clubInfo.name;
-    useEffect(() => {
-        Cookies.set('club', `${clubInfo}`)
-    }, []);
-
+const ClubLayout = ({ clubInfo = undefined, title = "", children, }) => {
     const [anchorElNav, setAnchorElNav] = useState(null);  //!!!!! I think this is useless?? check later --yasen
+    const [clubCookie, setClubCookie] = useState({});
+    const pages = clubCookie.pages !== undefined ? clubCookie.pages : [];
+    const clubName = clubCookie.name !== undefined ? clubCookie.name : "\\";
+    const router = useRouter();
+
+    useEffect(() => {
+        if (clubInfo !== undefined) {
+            Cookies.set('club', JSON.stringify(clubInfo), { path: `/club` });
+            setClubCookie(clubInfo);
+        } else {
+            let cookies = Cookies.get('club');
+            if (cookies !== undefined) {
+                setClubCookie(JSON.parse(Cookies.get('club')));
+            } else {
+                router.push('/club')
+                return;
+            }
+        }
+        return;
+    }, []);
+    console.log(typeof clubCookie)
+
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -56,17 +73,18 @@ const ClubLayout = ({ clubInfo, children, pages = ['products', 'pricing', 'blog'
 
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, }}>
-                            {pages.map((page, index) => (
-                                <Link key={index + page} href={urlCleaner(`/club/${title}/${page}`)} passHref>
-                                    <Button
+                            {
+                                pages.map((page, index) => (
+                                    <Link key={index + page} href={urlCleaner(`/club/${clubName}/${page}`)} passHref>
+                                        <Button
 
-                                        onClick={(event) => handleMenuItemClick(event, index)}
-                                        sx={{ my: 2, color: 'white', display: 'block' }}
-                                    >
-                                        {page}
-                                    </Button>
-                                </Link>
-                            ))}
+                                            onClick={(event) => handleMenuItemClick(event, index)}
+                                            sx={{ my: 2, color: 'white', display: 'block' }}
+                                        >
+                                            {page}
+                                        </Button>
+                                    </Link>
+                                ))}
                         </Box>
 
 
@@ -102,7 +120,7 @@ const ClubLayout = ({ clubInfo, children, pages = ['products', 'pricing', 'blog'
                                 }}
                             >
                                 {pages.map((page, index) => (
-                                    <Link key={index + page} href={urlCleaner(`/club/${title}/${page}`)} passHref>
+                                    <Link key={index + page} href={urlCleaner(`/club/${clubName}/${page}`)} passHref>
                                         <MenuItem key={page} onClick={(event) => handleMenuItemClick(event, index)} >
                                             <Typography textAlign="center">{page}</Typography>
                                         </MenuItem>
