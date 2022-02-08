@@ -8,7 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import ElementModification from './ElementModification';
 import HotDisplay from './HotDisplay';
 import { varNameGenerator } from "../../utils/helper"
-
+import axios from 'axios';
 //#comment: preferebly use useReducer instead of useStete --yasen
 function Index() {
     const [labelText, setLabelText] = useState('')
@@ -17,6 +17,7 @@ function Index() {
     const [tagArr, setTagArr] = useState([])
     const [tagType, setTagType] = useState('short-answer')
     const [hotDisplayArr, setHotDisplayArr] = useState([]);
+    const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
 
     useEffect(() => {
         setLabelText('');
@@ -52,11 +53,19 @@ function Index() {
         setTagArr(preState => [...preState, tag]);
     }
 
-    const generateFormHandler = () => {
+    const generateFormHandler = async () => {
         // TODO: 
+        //api/form POST: body: "clubID", "formID", "tags"
         // 1. get clubID
         // 2. store club form tags
         // 3. redirect to signup page
+
+        //api:
+        //update tags, update formID
+        // const formRes = await axios.post(baseUrl + "/api/form/", { data: { clubID, formID, tags } })
+        // const clubRes = await axios.post(baseUrl + "/api/club/", { data: { clubID, formID, tags } })
+
+        //
     }
 
 

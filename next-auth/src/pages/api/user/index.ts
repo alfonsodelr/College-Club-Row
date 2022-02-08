@@ -7,8 +7,7 @@ import { putItem } from "../../../../libs/ddb_putitem";
 import { deleteItem } from "../../../../libs/ddb_deleteitem";
 import { PutItemCommandInput, } from "@aws-sdk/client-dynamodb";
 import { ajv } from "../../../utils/validation"
-import { ValidateFunction } from 'ajv'
-import { Pipe, Tap, generateDefaultUser, userType } from "../../../utils/helper";
+import { Pipe, Tap, generateDefaultUser, userType, validateSchema } from "../../../utils/helper";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 
@@ -16,24 +15,22 @@ const tableName = process.env.DB_USER_TABLENAME;
 const postSchema = ajv.getSchema("api_user_post_schema");
 const getSchema = ajv.getSchema("api_user_get_schema");
 const deleteSchema = ajv.getSchema("api_user_delete_schema")
-const validate = (fn: ValidateFunction) => (data: Object) => { if (!fn(data)) throw new Error("api/user: Invalid_Param"); return data }
-
 
 export default async function handler(req, res) {
     var data: any = "";
     try {
         if (req.method === 'POST') {
-            data = await Pipe(validate(postSchema), createPostParams, putItem, checkError,)(req.body);
+            data = await Pipe(validateSchema(postSchema), createPostParams, putItem, checkError,)(req.body);
         } else if (req.method === "GET") {
-            data = await Pipe(validate(getSchema), getUser)(req.query)
+            data = await Pipe(validateSchema(getSchema), getUser)(req.query)
             if (!data.Item) {
-                data = await Pipe(generateDefaultUser, validate(postSchema), createPostParams, putItem, checkError,)(req.query);
+                data = await Pipe(generateDefaultUser, validateSchema(postSchema), createPostParams, putItem, checkError,)(req.query);
                 data.Item = unmarshall(data.params.Item)
             }
         } else if (req.method === "PATCH") {
 
         } else if (req.method === "DELETE") {
-            data = await Pipe(validate(deleteSchema), createDeleteParams, deleteItem)(req.body)
+            data = await Pipe(validateSchema(deleteSchema), createDeleteParams, deleteItem)(req.body)
         } else {
             return res.status(400).json({ msg: "bad request" })
         }
