@@ -108,9 +108,37 @@ function getClubRoleFromSession(roleArr: Array<string>) {
 }
 
 
+/*!
+ * @desc  gets club name given clubID
+ * @param  {clubID: number}   
+ * @return {clubName: string | false}    
+ */
 function getClubName(clubID: number) {
-    const clublist = { 111: "ags" }
+    const clublist = getClubs()
     if (clublist[clubID]) return clublist[clubID];
+    return false;
+}
+
+
+/*!
+ * @desc  returns club object with clibID as key and clubName as value
+ * @param  {none}   
+ * @return { {clubID: clubName, clubID: clubName ...} }    
+ */
+function getClubs() {
+    return { 111: "ags" }
+}
+
+/*!
+ * @desc  gets clubID given club name
+ * @param  {clubName: string}   
+ * @return {clubID: number | false}    
+ */
+function getClubID(clubName: string) {
+    const clublist = getClubs()
+    for (var id in clublist) {
+        if (clublist[id] === clubName) return id;
+    }
     return false;
 }
 
@@ -125,5 +153,6 @@ export {
     getClubRoleFromSession,
     validateRole_club,
     getClubName,
+    getClubID,
 }
 export type { userType } //I should export types from ./shcema.ts only.!!!! fix later
