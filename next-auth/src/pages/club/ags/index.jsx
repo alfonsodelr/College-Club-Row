@@ -3,7 +3,7 @@ import ClubLayout from '../../../components/layouts/ClubLayout';
 import { getClubID } from '../../../utils/helper';
 function index({ clubInfo }) {
 
-    return <ClubLayout clubInfo={clubInfo} pages={["Signup Form", "members", "tasks"]}>
+    return <ClubLayout clubInfo={clubInfo} title="AGS" >
         welcome to ags club {JSON.stringify(clubInfo)}
     </ClubLayout>
 }
@@ -18,7 +18,7 @@ export async function getStaticProps(ctx) {
     // const clubInfo = await res.json()
     return {
         props: {
-            clubInfo: { id: getClubID('ags'), name: 'ags' }
+            clubInfo: { id: getClubID('ags'), name: 'ags', pages: ["Signup Form", "members", "tasks"] }
         },
         // Next.js will attempt to re-generate the page:
         // - When a request comes in

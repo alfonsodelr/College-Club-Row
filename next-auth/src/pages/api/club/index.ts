@@ -12,6 +12,8 @@ import cookies from "../../../utils/cookies.js"
 const validatePost = ajv.getSchema("api_club_post_schema");
 const validateGet = ajv.getSchema("api_club_get_schema");
 const patchSchema = ajv.getSchema("api_club_patch_schema");
+
+//TODO: should only use validateSchema helper function via Pipe().!!!!! clean up
 const validate = (fn: ValidateFunction) => (data: Object) => { if (!fn(data)) throw new Error("api/club/: Invalid_Param"); return data }
 
 
@@ -47,7 +49,7 @@ async function handler(req, res) {
             }
             res.cookie('club2', `${data.Item}`)
         } else if (req.method === "PATCH") {
-            data = await Pipe(validate(patchSchema), generateUpdateParam, update)(req.body)
+            data = await Pipe(validate(patchSchema), generateUpdateParam, updateClub)(req.body)
 
         } else if (req.method === "DELETE") {
 
@@ -59,7 +61,7 @@ async function handler(req, res) {
         // return res.status(data['$metadata'].httpStatusCode).json({ ...data })
     } catch (error) {
         console.log(error)
-        return res.status(404).json({ msg: JSON.stringify(error) });
+        return res.status(404).json({ error: JSON.stringify(error.message) });
     }
 }
 
@@ -114,21 +116,47 @@ function generateUpdateParam(body) {
         // data = await updateItem(params)
         // data = params;
         return { ...body, club_params, user_params };
+    } else if (dataAction === 'update') {
+        let dataKey = body.key;
+        let dataValue = body.value;
+        let clubID = body.clubID
+
+        const params: UpdateItemCommandInput = {
+            TableName: process.env.DB_CLUB_TABLENAME,
+            Key: {
+                clubID: { S: clubID },
+            },
+            UpdateExpression: `set #key = :i`,
+            ExpressionAttributeNames: { "#key": `${dataKey}` },
+            ExpressionAttributeValues: {
+                ":i": { S: JSON.stringify(dataValue) },
+            },
+            ReturnValues: "ALL_NEW"
+        };
+
+        // data = await updateItem(params)
+        // data = params;
+        return { ...body, params };
     }
 
     throw new Error("api/club generateUpdateParam action not found");
 }
 
-async function update(body) {
+async function updateClub(body) {
     if (body.action === "append_role") {
         var clubResponse = await updateItem(body.club_params);
         var userResponse = await updateItem(body.user_params);
-        if (clubResponse['$metadata'].httpStatusCode === 200 && userResponse['$metadata'].httpStatusCode === 200) {
+        if (clubResponse['$metadata']?.httpStatusCode === 200 && userResponse['$metadata']?.httpStatusCode === 200) {
             return { ...body, clubResponse, userResponse }
-        } else {
-            throw new Error("api/club Update response status != 200.\n" + clubResponse + userResponse);
         }
-    }
+        throw new Error("api/club Update append_role action response status != 200.\n" + clubResponse + userResponse);
 
+    } else if (body.action === "update") {
+        var updateResponse = await updateItem(body.params);
+        if (updateResponse['$metadata']?.httpStatusCode === 200) {
+            return { ...body, updateResponse }
+        }
+        throw new Error("api/club Update update action response status != 200.\n" + updateResponse);
+    }
     throw new Error("api/club UPdate action not found");
 }

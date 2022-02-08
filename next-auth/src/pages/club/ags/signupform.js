@@ -5,7 +5,7 @@ import axios from 'axios';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 function signupform() {
-    return <ClubLayout title="AGS" pages={["Signup Form", "members", "tasks"]}>
+    return <ClubLayout title="AGS Sign Up" >
         <FormGenerator />
     </ClubLayout>
 }
@@ -16,7 +16,6 @@ export async function getServerSideProps(context) {
     2. get club cookie data -> return it via prop.
 
     */
-
 
     // const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
     // const res = await axios.get(baseUrl + "/api/club/", { params: { clubID: 111 } })
