@@ -4,7 +4,7 @@ import { updateItem } from "../../../../libs/ddb_updateitem";
 import { deleteItem } from "../../../../libs/ddb_deleteitem"
 import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, DeleteItemCommandInput } from "@aws-sdk/client-dynamodb";
 import { ajv } from "../../../utils/validation"
-import { marshall } from "@aws-sdk/util-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ValidateFunction } from "ajv";
 import { Pipe, validateRole } from "../../../utils/helper";
 import cookies from "../../../utils/cookies.js"
@@ -37,13 +37,20 @@ async function handler(req, res) {
                 },
             }
             data = await getItem(params);
+            data.Item = unmarshall(data.Item);
 
-            res.cookie('clubGetCookie', 'api-yayayayaya!')
-            // Return the `set-cookie` header so we can display it in the browser and show that it works!
+            //!!!!! have to check if this set cookie works
+            //!!!!! not a good idea to set all the items in cookie
+            //!!!!! we should encrypt the cookie later with JWT
+            if (data['$metadata'].httpStatusCode && data['$metadata'].httpStatusCode === 200 && data.Item) {
+                res.cookie('club1', `${data.Item}`)// { httpOnly: true, secure: process.env.NEXT_PUBLIC_NODE_ENV !== 'dev', sameSite: 'strict', path: "/club" }
+            }
+            res.cookie('club2', `${data.Item}`)
         } else if (req.method === "PATCH") {
             data = await Pipe(validate(patchSchema), generateUpdateParam, update)(req.body)
 
         } else if (req.method === "DELETE") {
+
 
         } else {
             return res.status(400).json({ msg: "bad request" })
