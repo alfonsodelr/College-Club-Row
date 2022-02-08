@@ -25,3 +25,18 @@ const cookies = (handler) => (req, res) => {
 }
 
 export default cookies
+
+/*
+some serverside cookie options:  
+
+({
+    httpOnly: true, 
+    secure: process.env.NONE_ENV !=== "development",
+    maxAge: 60 * 60 ,
+    sameSite: 'strict',
+    path: "/club", 
+    expires: new Date(0)//this expires the cookies immidiately. 
+
+})
+
+*/
