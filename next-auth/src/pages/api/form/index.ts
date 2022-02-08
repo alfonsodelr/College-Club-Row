@@ -4,56 +4,38 @@ import { updateItem } from "../../../../libs/ddb_updateitem";
 import { deleteItem } from "../../../../libs/ddb_deleteitem"
 import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, DeleteItemCommandInput } from "@aws-sdk/client-dynamodb";
 import { ajv } from "../../../utils/validation"
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { errorHandler, Pipe, Tap, validateSchema } from "../../../utils/helper";
 
+
+interface postBodyType {
+    clubID: string,
+    formID: string,
+    tags: Array<object>
+}
+
+interface getBodyType {
+    clubID: string,
+    formID: string,
+}
 
 
 const validateGet = ajv.getSchema("api_form_get_schema")
 const validatePost = ajv.getSchema("api_form_post_schema")
 const validatePatch = ajv.getSchema("api_form_patch_schema")
 const validateDelete = ajv.getSchema("api_form_delete_schema")
-function arrObjectTodbMap(param: object[]) {
-    param.map(item => {
-        let key = Object.keys(item)[0];
-        let val = item[key]
-        return {
-            M: { [key]: { S: val } }
-        }
-    })
-}
-
 
 export default async function handler(req, res) {
     var data: any;
     try {
         if (req.method === 'POST') {
-            var d = req.body.Item.tags;
-            if (!validatePost(req.body)) throw new Error("api/form/index.ts --post: invalid Param");
-            const params: PutItemCommandInput = {
-                TableName: process.env.DB_CLUB_FORM_TABLENAME,
-                Item: {
-                    clubID: { S: req.body.Item.clubID },
-                    formID: { S: req.body.Item.formID },
-                    tags: {
-                        S: JSON.stringify(req.body.Item.tags)
-                    }
-                }
-            };
-            data = await putItem(params)
+            let body: postBodyType = req.body;
+            data = await Pipe(validateSchema(validatePost), createPostParams, posForm)(body)
+
         } else if (req.method === "GET") {
-            // + might have to remove the Key from req.body schema.
-            if (!validateGet(req.body)) throw new Error("api/form/index.ts --get: Invalid Param");
-            const params: GetItemCommandInput = {
-                TableName: process.env.DB_CLUB_FORM_TABLENAME,
-                Key: {
-                    clubID: {
-                        S: req.body.clubID
-                    },
-                    formID: {
-                        S: req.body.formID
-                    }
-                },
-            }
-            data = await getItem(params);
+            let body: getBodyType = req.query;
+            data = await Pipe(validateSchema(validateGet), createGetParams, getForm)(body)
+
         } else if (req.method === "PATCH") {
             if (!validatePatch(req.body)) throw new Error("api/form/index.js --patch: invalid Param");
 
@@ -88,10 +70,71 @@ export default async function handler(req, res) {
         } else {
             return res.status(400).json({ msg: "bad request" })
         }
-
-        return res.status(data['$metadata'].httpStatusCode).json({ data })
+        let ddbStatus = data['$metadata']?.httpStatusCode;
+        return res.status(ddbStatus !== undefined ? ddbStatus : 204).json({ ...data })
     } catch (error) {
-        console.log(error)
-        return res.status(404).json({ msg: JSON.stringify(error) });
+        return res.status(404).json({ error: errorHandler(req, error) });
     }
+}
+
+
+
+
+
+/*!
+ * @desc  generates ddb PutItemCommandInput for api/form POST
+ * @param  {body} {...req.body}   
+ * @return {...body, params} 
+ */
+function createPostParams(body) {
+    const params: PutItemCommandInput = {
+        TableName: process.env.DB_CLUB_FORM_TABLENAME,
+        Item: { ...marshall(body) }
+    };
+
+    return { ...body, params }
+}
+
+
+/*!
+ * @desc  calls ddb_putItem for api/form POST.
+ * @param  {body} {...req.body, params}   
+ * @return {clubID, formID, $metadata} 
+ */
+async function posForm(body) {
+    var dbResponse = await putItem(body.params);
+    if (dbResponse['$metadata'] !== undefined) body['$metadata'] = dbResponse['$metadata']
+    delete body.params;
+    delete body.tags;
+    return { ...body, }
+}
+
+
+
+/*!
+ * @desc  generates ddb PutItemCommandInput for api/form GET
+ * @param  {body} {...req.body}   
+ * @return {...body, params} 
+ */
+function createGetParams(body) {
+    const params: GetItemCommandInput = {
+        TableName: process.env.DB_CLUB_FORM_TABLENAME,
+        Key: { ...marshall(body) }
+    }
+    return { ...body, params }
+}
+
+
+/*!
+ * @desc  calls ddb_getItem for api/form GET.
+ * @param  {body} {...req.body, params}   
+ * @return {clubID, formID, $metadata, Item} 
+ */
+async function getForm(body) {
+    var dbResponse: any = await getItem(body.params);
+    body['$metadata'] = dbResponse['$metadata'];
+    dbResponse.Item = dbResponse.Item !== undefined ? unmarshall(dbResponse.Item) : "Item not found.";
+    body.Item = dbResponse.Item;
+    delete body.params;
+    return { ...body }
 }

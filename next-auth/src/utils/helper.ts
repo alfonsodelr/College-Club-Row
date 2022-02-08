@@ -1,6 +1,7 @@
 import axios from "axios"
 import { ApiUserGETQueryParamType as GetUserParamType } from '../pages/api/apiParamType'
-// import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { ValidateFunction } from 'ajv'
+
 
 const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
 
@@ -142,6 +143,17 @@ function getClubID(clubName: string) {
     return false;
 }
 
+const validateSchema = (fn: ValidateFunction) => (data: Object) => { if (!fn(data)) throw new Error("Invalid_Param_Schema"); return data }
+
+function errorHandler(req, error) {
+    if (error.message === "Invalid_Param_Schema") {
+        return (req.url + " " + req.method + ": " + error.message)
+    }
+
+
+    return ("unexpected_error: " + req.url + " " + req.method + ": " + error.message)
+}
+
 export {
     varNameGenerator,
     Tap,
@@ -154,5 +166,7 @@ export {
     validateRole_club,
     getClubName,
     getClubID,
+    validateSchema,
+    errorHandler,
 }
 export type { userType } //I should export types from ./shcema.ts only.!!!! fix later
