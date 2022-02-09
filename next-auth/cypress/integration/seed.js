@@ -56,4 +56,52 @@ var sampleForm01 = [
     }
 ]
 
-export { sampleUsers, sampleForm01 }
+var apiClubAppendRoleData = [
+    {
+        key: "officers",
+        value: "104142427804075574374",
+        action: "append_role"
+    }, {
+        key: "advisor",
+        value: "104142423",
+        action: "append_role"
+    }
+]
+
+
+var apiClubPostData = [
+    {
+        clubID: "111",
+        clubName: "ags1",
+        formID: "",
+        members: [],
+        officers: []
+    },
+    {
+        clubID: "112",
+        clubName: "ags2",
+        formID: "",
+        members: [],
+        officers: []
+    }, {
+        clubID: "113",
+        clubName: "ags3",
+        formID: "",
+        members: [],
+        officers: []
+    }, {
+        clubID: "114",
+        clubName: "ags4",
+        formID: "",
+        members: [],
+        officers: []
+    }, {
+        clubID: "115",
+        clubName: "ags5",
+        formID: "",
+        members: [],
+        officers: []
+    }
+]
+
+export { sampleUsers, sampleForm01, apiClubPostData, apiClubAppendRoleData }

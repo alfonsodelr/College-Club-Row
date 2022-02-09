@@ -19,5 +19,7 @@ Description: this file should work as a temporary documentation file.
 3. run database contaier by:  docker-compose up -d dynamodb && docker logs -f my-dynamodb
 
 4. Error:
-    A.Error ValidationException: The number of conditions on the keys is invalid.
+    A. Error ValidationException: The number of conditions on the keys is invalid.
         this error occur when the keys of table doesn't match, check if the keys and tableName is correct.
+    B. Error ValidationException: The provided expression refers to an attribute that does not exist in the item
+        this error occured when api is tring to update a db column that doesn't exist.
