@@ -1,7 +1,7 @@
 import axios from "axios"
 import { ApiUserGETQueryParamType as GetUserParamType } from '../pages/api/apiParamType'
 import { ValidateFunction } from 'ajv'
-
+import { v4 as uuidv4 } from 'uuid';
 
 const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
 
@@ -154,6 +154,13 @@ function errorHandler(req, error) {
     return ("unexpected_error: " + req.url + " " + req.method + ": " + error.message)
 }
 
+function genereateID(type) {
+    if (type === "formID") {
+        return uuidv4();
+    }
+    return uuidv4();
+}
+
 export {
     varNameGenerator,
     Tap,
@@ -168,5 +175,6 @@ export {
     getClubID,
     validateSchema,
     errorHandler,
+    genereateID,
 }
 export type { userType } //I should export types from ./shcema.ts only.!!!! fix later
