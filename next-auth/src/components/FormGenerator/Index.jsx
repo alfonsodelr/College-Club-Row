@@ -7,17 +7,33 @@ import FormDisplay from './FormDisplay';
 import Toolbar from '@mui/material/Toolbar';
 import ElementModification from './ElementModification';
 import HotDisplay from './HotDisplay';
-import { varNameGenerator } from "../../utils/helper"
+import { genereateID, urlCleaner, varNameGenerator } from "../../utils/helper"
 import axios from 'axios';
+import Cookies from 'js-cookie'
+import { useRouter } from 'next/router';
+
 //#comment: preferebly use useReducer instead of useStete --yasen
 function Index() {
     const [labelText, setLabelText] = useState('')
     const requiredRef = useRef()
     const descriptionRef = useRef();
     const [tagArr, setTagArr] = useState([])
-    const [tagType, setTagType] = useState('short-answer')
+    const [tagType, setTagType] = useState('short-answer');
+    const [clubCookies, setClubCookies] = useState('');
     const [hotDisplayArr, setHotDisplayArr] = useState([]);
     const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
+    const router = useRouter();
+    useEffect(() => {
+        let clubCookie = Cookies.get('club');
+        if (clubCookie === undefined) {
+            router.push('/club');
+        } else {
+            setClubCookies(JSON.parse(clubCookie))
+        }
+        return;
+    }, []);
+
+
 
     useEffect(() => {
         setLabelText('');
@@ -54,18 +70,15 @@ function Index() {
     }
 
     const generateFormHandler = async () => {
-        // TODO: 
-        //api/form POST: body: "clubID", "formID", "tags"
-        // 1. get clubID
-        // 2. store club form tags
-        // 3. redirect to signup page
-
-        //api:
-        //update tags, update formID
-        // const formRes = await axios.post(baseUrl + "/api/form/", { data: { clubID, formID, tags } })
-        // const clubRes = await axios.post(baseUrl + "/api/club/", { data: { clubID, formID, tags } })
-
-        //
+        if (tagArr.length === 0) { console.log("Must have at least one tag."); return }
+        try {
+            const formID = genereateID('formID');
+            const formRes = await axios.post(baseUrl + "/api/form/", { clubID: clubCookies.id, formID, tags: tagArr })
+            const clubRes = await axios.patch(baseUrl + "/api/club/", { clubID: clubCookies.id, key: 'formID', value: formID, action: 'update' })
+            router.push(`/club/${urlCleaner(clubCookies.name)}`)
+        } catch (error) {
+            console.log("error: ", error.message)
+        }
     }
 
 

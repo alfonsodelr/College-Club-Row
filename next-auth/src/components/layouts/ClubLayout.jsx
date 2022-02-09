@@ -29,8 +29,8 @@ const ClubLayout = ({ clubInfo = undefined, title = "", children, }) => {
     const router = useRouter();
 
     useEffect(() => {
-        if (clubInfo !== undefined) {
-            Cookies.set('club', JSON.stringify(clubInfo), { path: `/club` });
+        if (clubInfo !== undefined && Cookies.get('club') === undefined) {
+            Cookies.set('club', JSON.stringify(clubInfo));
             setClubCookie(clubInfo);
         } else {
             let cookies = Cookies.get('club');

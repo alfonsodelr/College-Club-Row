@@ -6,7 +6,7 @@ import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, Delet
 import { ajv } from "../../../utils/validation"
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ValidateFunction } from "ajv";
-import { Pipe, validateRole } from "../../../utils/helper";
+import { Pipe, Tap, validateRole } from "../../../utils/helper";
 import cookies from "../../../utils/cookies.js"
 
 const validatePost = ajv.getSchema("api_club_post_schema");
@@ -60,7 +60,7 @@ async function handler(req, res) {
         return res.status(200).json({ ...data })
         // return res.status(data['$metadata'].httpStatusCode).json({ ...data })
     } catch (error) {
-        console.log(error)
+        console.log("error: ", error)
         return res.status(404).json({ error: JSON.stringify(error.message) });
     }
 }
