@@ -21,11 +21,11 @@ start: 10:43 pm 1/28
 
 2/3 start: 9:47am end 12:10 am. 1hr lunch
 
-2/6 start 9:45am  end 101:05 am 2hr break
+2/6 start 9:45am  end 01:05 am 2hr break
 
-2/8 start 8:50am
+2/8 start 8:50am  end 11:30pm  1:55 break
 
-
+2/9 start 9:30am
 
 
 ------------------------fix later----------------------------
