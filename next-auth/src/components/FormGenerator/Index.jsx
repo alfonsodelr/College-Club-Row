@@ -33,8 +33,6 @@ function Index() {
         return;
     }, []);
 
-
-
     useEffect(() => {
         setLabelText('');
         setTagType("short-answer");
