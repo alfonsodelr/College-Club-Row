@@ -53,5 +53,4 @@ function signup() {
         </Box>
     </MemberLayout >
 }
-
 export default signup;
