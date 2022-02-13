@@ -6,6 +6,7 @@ import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, Delet
 import { ajv } from "../../../utils/validation"
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { errorHandler, Pipe, Tap, validateSchema } from "../../../utils/helper";
+import { scanTable } from "../../../../libs/ddb_scantable";
 
 
 interface postBodyType {
@@ -34,7 +35,13 @@ export default async function handler(req, res) {
 
         } else if (req.method === "GET") {
             let body: getBodyType = req.query;
-            data = await Pipe(validateSchema(validateGet), createGetParams, getForm)(body)
+
+            if (body.clubID === 'all' && body.formID === 'all') {
+                //getAll() for club_form shuould only return {clubID} and {formID}  
+                data = await Pipe(createParams_getAll, scanTable)();
+            } else {
+                data = await Pipe(validateSchema(validateGet), createGetParams, getForm)(body);
+            }
 
         } else if (req.method === "PATCH") {
             if (!validatePatch(req.body)) throw new Error("api/form/index.js --patch: invalid Param");
@@ -133,8 +140,26 @@ function createGetParams(body) {
 async function getForm(body) {
     var dbResponse: any = await getItem(body.params);
     body['$metadata'] = dbResponse['$metadata'];
-    dbResponse.Item = dbResponse.Item !== undefined ? unmarshall(dbResponse.Item) : "Item not found.";
-    body.Item = dbResponse.Item;
+    body.Item = dbResponse.Item !== undefined ? unmarshall(dbResponse.Item) : "Item not found.";
     delete body.params;
     return { ...body }
+}
+
+
+
+/*!
+ * @desc  creates params for scanTable();
+ * @param  {}    
+ * @return {ScanCommandOutput} 
+ */
+function createParams_getAll() {
+    var params = {
+        TableName: process.env.DB_CLUB_FORM_TABLENAME,
+        ProjectionExpression: "#clubID, #formID",
+        ExpressionAttributeNames: {
+            "#formID": "formID",
+            "#clubID": "clubID"
+        }
+    };
+    return params;
 }

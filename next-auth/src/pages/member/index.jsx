@@ -7,7 +7,6 @@ function index() {
 }
 
 export async function getStaticProps(ctx) {
-
     return {
         props: {
             clubInfo: "clubinfo"
@@ -18,4 +17,5 @@ export async function getStaticProps(ctx) {
         revalidate: 43200, // 12 hours in seconds
     }
 }
+
 export default index;

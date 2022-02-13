@@ -145,6 +145,13 @@ function getClubID(clubName: string) {
 
 const validateSchema = (fn: ValidateFunction) => (data: Object) => { if (!fn(data)) throw new Error("Invalid_Param_Schema"); return data }
 
+
+
+/*!
+ * @error handler for API requests:
+ * @param  {req:apiRequest, error: Error}   
+ * @return {req.url + " " + req.method + ": " + error.message}     
+ */
 function errorHandler(req, error) {
     if (error.message === "Invalid_Param_Schema") {
         return (req.url + " " + req.method + ": " + error.message)

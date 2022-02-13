@@ -4,9 +4,8 @@ import ClubGenerator from "../../components/ClubGenerator"
 
 function create() {
     return <div>
-        {/* <Wave headerTitle="Create CLub" />
-        <ClubGenerator /> */}
-        404
+        <Wave headerTitle="Create CLub" />
+        <ClubGenerator />
     </div>;
 }
 
