@@ -15,7 +15,7 @@ function ElementModification({ addHotDisplayArrHandler, tagType = "", }) {
         return tagTypeObject;
     }
 
-    function newModArrElement() { return { value: varNameGenerator(tagType), label: tagTypeProp()[tagType].ref.current.value } }
+    function newModArrElement() { return { value: varNameGenerator(tagType, false), label: tagTypeProp()[tagType].ref.current.value } }
 
     const addModHanlder = () => {
         addHotDisplayArrHandler(newModArrElement(tagType))
