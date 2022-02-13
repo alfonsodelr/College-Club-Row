@@ -36,6 +36,12 @@ ajv.getSchema("api_user_role_post_schema");
 ajv.addSchema(schem.api_club_patch_schema, "api_club_patch_schema");
 ajv.getSchema("api_club_patch_schema");
 
+ajv.addSchema(schem.api_form_userinput_post_schema, "api_form_userinput_post_schema");
+ajv.getSchema("api_form_userinput_post_schema");
+
+ajv.addSchema(schem.api_form_userinput_get_schema, "api_form_userinput_get_schema");
+ajv.getSchema("api_form_userinput_get_schema");
+
 export { ajv }
 
 

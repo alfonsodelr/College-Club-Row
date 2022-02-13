@@ -25,10 +25,18 @@ start: 10:43 pm 1/28
 
 2/8 start 8:50am  end 11:30pm  1:55 break
 
-2/9 start 9:30am
+2/9 start 9:30am  end 3:14pm
+
+2/10 start 8:05am end 12:15am
+
+1/12 start 8:15am end 11:33am
+
+1:13 start 07:53am 
 
 
 ------------------------fix later----------------------------
 1. can I get the club profile with the user togather if the user have a club position?
 2. create typescript types that has type of 'any'
 3. officers who has role in more that one club, should be given which club to sign in as.
+4. DisplayForm() component checkBox and multipleChoice element should have full width.
+5. Dynamodb ScanTable() pagination for scan club and clubForm.

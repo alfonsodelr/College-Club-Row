@@ -63,7 +63,17 @@ const api_club_post_schema = {
         officers: {
             type: "array", items: { type: "string" },
         },
-        members: { type: "array", items: { type: "string" } }
+        members: { type: "array", items: { type: "string" } },
+        image: { type: 'string' },
+        purpose: { type: 'string' },
+        status: { type: "string" },
+        term: {
+            type: 'object',
+            properties: {
+                year: { type: "string" },
+                semester: { type: "string" },
+            }
+        }
     },
     minProperties: 2,
     required: ["clubID", "clubName"],
@@ -142,6 +152,30 @@ const api_club_patch_schema = {
     maxProperties: 4,
 }
 
+const api_form_userinput_post_schema = {
+    type: "object",
+    properties: {
+        userID: { type: "string" },
+        term: { type: "string" },
+        tags: {
+            type: "array",
+            items: { type: "object" },
+            minItems: 1,
+        },
+    },
+    required: ["userID", "term", "tags"],
+}
+
+
+
+const api_form_userinput_get_schema = {
+    type: "object",
+    properties: {
+        userID: { type: "string" },
+        term: { type: "string" },
+    },
+    required: ["userID", "term"],
+}
 
 type sessionType = {
     name: string,
@@ -164,7 +198,6 @@ type sessionType = {
 
 
 
-
 export {
     api_form_get_schema,
     api_form_post_schema,
@@ -176,7 +209,9 @@ export {
     api_user_get_schema,
     api_user_delete_schema,
     api_user_role_post_schema,
-    api_club_patch_schema
+    api_club_patch_schema,
+    api_form_userinput_post_schema,
+    api_form_userinput_get_schema,
 }
 
 export type { sessionType }
