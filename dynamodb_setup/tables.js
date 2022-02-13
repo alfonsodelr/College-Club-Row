@@ -58,9 +58,32 @@ const CCR_club_TableParams = {
 };
 
 
+const CCR_user_form_TableParams = {
+    AttributeDefinitions: [
+        {
+            AttributeName: "userID",
+            AttributeType: "S",
+        },
+        {
+            AttributeName: "term",
+            AttributeType: "S",
+        },
+    ],
+    KeySchema: [
+        {
+            AttributeName: "userID",
+            KeyType: "HASH",
+        },
+        {
+            AttributeName: "term",
+            KeyType: "RANGE",
+        },
+    ],
+    TableName: "CCR-user-form"
+};
 
 
-const paramsArr = [CCR_club_form_TableParams, CCR_club_TableParams, CCR_user_TableParams]
+const paramsArr = [CCR_club_form_TableParams, CCR_club_TableParams, CCR_user_TableParams, CCR_user_form_TableParams]
 
 
 
