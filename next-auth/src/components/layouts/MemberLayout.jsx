@@ -1,5 +1,5 @@
-import { React, useState, useEffect } from 'react';
-import Cookies from 'js-cookie'
+import { React, useState } from 'react';
+import $ from "./MemberLayout.module.scss"
 
 //MUI components
 import AppBar from '@mui/material/AppBar';
@@ -15,13 +15,15 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
 import { urlCleaner } from '../../utils/helper'
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
+import { signIn, signOut, useSession } from "next-auth/react"
 
 const MemberLayout = ({ clubInfo = undefined, title = "", children, }) => {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const pages = [];
     const clubName = "\\";
-    const router = useRouter();
+    const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL
+    const { data: session, status } = useSession()
 
 
     const handleOpenNavMenu = (event) => {
@@ -117,26 +119,30 @@ const MemberLayout = ({ clubInfo = undefined, title = "", children, }) => {
                             {title}
                         </Typography>
 
-                        <Link href={`/api/auth/signout`}
-                            onClick={(e) => {
-                                e.preventDefault()
-                                signOut()
-                            }}>
-                            {/* this is the Signout button for later */}
-                            <Button color="inherit"></Button>
-                        </Link>
 
 
-                        {/* <a
-                            href={`/api/auth/signout`}
-                            className={styles.button}
-                            onClick={(e) => {
-                                e.preventDefault()
-                                signOut()
-                            }}
-                        >
-                            Sign out
-                        </a> */}
+                        {session && (
+                            <>
+                                {session.user.image && (
+                                    <span
+                                        style={{ backgroundImage: `url('${session.user.image}')` }}
+                                        className={$.avatar}
+                                    />
+                                )}
+                                <span className={$.signedInText}>
+                                    <strong> {session.user.email || session.user.name}</strong>
+                                </span>
+                                <a
+                                    href={`/api/auth/signout`}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        signOut({ callbackUrl: `${baseUrl}/member/clubs` })
+                                    }}
+                                >
+                                    <Button color="inherit">Signout</Button>
+                                </a>
+                            </>
+                        )}
 
                     </Toolbar>
                 </Container>

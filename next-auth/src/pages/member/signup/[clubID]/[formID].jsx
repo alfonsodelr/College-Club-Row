@@ -8,6 +8,8 @@ function signup({ tagArr }) {
     return <MemberLayout>
         {tagArr !== undefined ? <DisplayForm tagArr={tagArr !== undefined ? tagArr : []} /> : <Loading />}
     </MemberLayout >
+
+
 }
 
 // This function gets called at build time
@@ -45,5 +47,5 @@ export async function getStaticProps({ params }) {
 }
 
 
-
+signup.auth = true;
 export default signup;

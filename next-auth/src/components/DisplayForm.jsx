@@ -1,4 +1,6 @@
 import { React, useState } from 'react'
+import { useSession } from "next-auth/react"
+
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import RadioButtonsGroup_Custom from '../components/FormGenerator/RadioButtonsGroup_Custom' //'./RadioButtonsGroup_Custom';
@@ -7,6 +9,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import $ from './DisplayForm.module.scss'
 
 function DisplayForm({ tagArr }) {
+    const { data: session, status } = useSession()
     const [userInput, setUserInput] = useState([...tagArr])
 
     const inputHandler = (value, index) => {
@@ -15,6 +18,10 @@ function DisplayForm({ tagArr }) {
 
     const submithandler = () => {
         console.log(userInput, "hi")
+    }
+
+    if (status !== "authenticated") {
+        return <a href="/api/auth/signin">Sign in</a>
     }
     return (
         <>
