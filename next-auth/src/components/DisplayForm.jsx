@@ -1,65 +1,77 @@
-import React from 'react'
-import Box from '@mui/material/Box';
+import { React, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import RadioButtonsGroup_Custom from '../components/FormGenerator/RadioButtonsGroup_Custom' //'./RadioButtonsGroup_Custom';
 import CheckboxGroup from '../components/FormGenerator/CheckboxGroup';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-function DisplayForm({ tagArr }) {
+import $ from './DisplayForm.module.scss'
 
+function DisplayForm({ tagArr }) {
+    const [userInput, setUserInput] = useState([...tagArr])
+
+    const inputHandler = (value, index) => {
+        setUserInput((userInput) => { userInput[index].values = value; return userInput; })
+    }
+
+    const submithandler = () => {
+        console.log(userInput, "hi")
+    }
     return (
         <>
-            {
-                tagArr.map((e) => {
-                    if (e.tagType === 'short-answer') {
-                        return (
-                            <Box key={e.id} sx={{ flexDirection: 'row', boxShadow: 3 }}  >
-                                <TextField multiline={false} fullWidth id={e.id} placeholder={e.description} label={e.label} variant="standard" required={e.required} />
-                            </Box>
-                        )
-                    } else if (e.tagType === 'paragraph') {
-                        return (
-                            <Box key={e.id} sx={{ flexDirection: 'row', boxShadow: 3 }} >
-                                <TextField multiline={true} fullWidth id={e.id} placeholder={e.description} label={e.label} variant="outlined" required={e.required} />
+            <div className={$.flexContainer}>
+                {
+                    tagArr.map((tag, index) => {
+                        if (tag.tagType === 'short-answer') {
+                            return (
+                                <div key={index} className={$.shortAnswer}>
+                                    <TextField onChange={(e) => { inputHandler(e.target.value, index) }} multiline={false} fullWidth id={tag.id} placeholder={tag.description} label={tag.label} variant="standard" required={tag.required} />
+                                </div>
+                            )
+                        } else if (tag.tagType === 'paragraph') {
+                            return (
+                                <div key={index} className={$.paragraph}>
+                                    <TextField onChange={(e) => { inputHandler(e.target.value, index) }} multiline={true} fullWidth id={tag.id} placeholder={tag.description} label={tag.label} variant="outlined" required={tag.required} />
 
-                            </Box>)
-                    } else if (e.tagType === 'multiple-choice') {
-                        return (
-                            <Box key={e.id} sx={{ flexDirection: 'column', boxShadow: 3 }}  >
-                                <RadioButtonsGroup_Custom formLabel={e.label} li={e.values}></RadioButtonsGroup_Custom>
+                                </div>
+                            )
+                        } else if (tag.tagType === 'multiple-choice') {
+                            return (
+                                <div key={index} className={$.myltipleChoice}>
+                                    <RadioButtonsGroup_Custom inputHandler={(value) => { inputHandler(value, index) }} formLabel={tag.label} li={tag.values}></RadioButtonsGroup_Custom>
+                                </div>
+                            )
+                        } else if (tag.tagType === 'check-box') {
+                            return (
 
-                            </Box>)
-                    } else if (e.tagType === 'check-box') {
-                        return (
-                            <Box key={e.id} sx={{ flexDirection: 'column', boxShadow: 3 }}  >
-                                <CheckboxGroup formLabel={e.label} li={e.values}></CheckboxGroup>
-
-                            </Box>)
-                    } else if (e.tagType === 'file-upload') {
-                        return (
-                            <Box key={e.id} sx={{ flexDirection: 'column', boxShadow: 3 }}  >
-                                < h3 > {e.label}</h3 >
-                                <Button
-                                    varian='default'
-                                    component="label"
-                                    startIcon={<CloudUploadIcon color='info' />}>
-                                    Upload File
-                                    <input
-                                        type="file"
-                                        hidden
-                                    />
-                                </Button>
-                            </Box>)
-
-
-
-                    }
-
-                })
-            }
+                                <div key={index} className={$.checkBox}>
+                                    <CheckboxGroup inputHandler={(value) => { inputHandler(value, index) }} formLabel={tag.label} li={tag.values}></CheckboxGroup>
+                                </div>
+                            )
+                        } else if (tag.tagType === 'file-upload') {
+                            return (
+                                <div key={index} className={$.fileUpload}>
+                                    < h3 > {tag.label}</h3 >
+                                    <Button
+                                        varian='default'
+                                        component="label"
+                                        startIcon={<CloudUploadIcon color='info' />}>
+                                        Upload File
+                                        <input
+                                            type="file"
+                                            hidden
+                                        />
+                                    </Button>
+                                </div>
+                            )
+                        }
+                    })
+                }
+                <Button onClick={submithandler} variant='contained'>Submit</Button>
+            </div>
         </>
     )
 }
+
 
 export default DisplayForm
 

@@ -9,10 +9,10 @@ function DisplayClubs({ clubArr }) {
     const router = useRouter()
     const signupHandler = (e) => {
         let clubIndex = e.target.id;
-        let clubName = urlCleaner(clubArr[clubIndex].clubName)
         let clubID = clubArr[clubIndex].clubID;
+        let formID = clubArr[clubIndex].formID;
         e.preventDefault();
-        router.push(`/member/${clubName}/signup?club=${clubID}`)
+        router.push(`/member/signup/${clubID}/${formID}`)
     }
 
     return <div className={$.container}>
