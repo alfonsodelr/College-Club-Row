@@ -2,13 +2,13 @@ import { getItem } from "../../../../libs/ddb_getitem";
 import { putItem } from "../../../../libs/ddb_putitem";
 import { updateItem } from "../../../../libs/ddb_updateitem";
 import { deleteItem } from "../../../../libs/ddb_deleteitem"
-import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, DeleteItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, ScanCommandInput, ScanCommandOutput } from "@aws-sdk/client-dynamodb";
 import { ajv } from "../../../utils/validation"
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ValidateFunction } from "ajv";
-import { Pipe, Tap, validateRole } from "../../../utils/helper";
+import { Pipe, Tap, validateRole, validateSchema } from "../../../utils/helper";
 import cookies from "../../../utils/cookies.js"
-
+import { scanTable } from "../../../../libs/ddb_scantable"
 const validatePost = ajv.getSchema("api_club_post_schema");
 const validateGet = ajv.getSchema("api_club_get_schema");
 const patchSchema = ajv.getSchema("api_club_patch_schema");
@@ -21,7 +21,10 @@ async function handler(req, res) {
     var data: any = "";
     try {
         if (req.method === 'POST') {
+
             if (!validatePost(req.body)) throw new Error("api/club/index.ts --post: invalid Param");
+            if (!req.body.status) req.body.status = 1;
+            if (!req.body.term) req.body.term = { year: '2022', semester: 'spring' };
             data = marshall(req.body);
             const params: PutItemCommandInput = {
                 TableName: process.env.DB_CLUB_TABLENAME,
@@ -29,25 +32,21 @@ async function handler(req, res) {
             };
             data = await putItem(params)
         } else if (req.method === "GET") {
-            if (!validateGet(req.query)) throw new Error("api/club/index.ts --get: Invalid Param");
-            const params: GetItemCommandInput = {
-                TableName: process.env.DB_CLUB_TABLENAME,
-                Key: {
-                    clubID: {
-                        S: req.query.clubID
-                    }
-                },
-            }
-            data = await getItem(params);
-            data.Item = unmarshall(data.Item);
+            if (req.query.clubID === 'all') {
+                data = await Pipe(createParams_getAll, scanTable)();
+                // console.log(data.header())
 
-            //!!!!! have to check if this set cookie works
-            //!!!!! not a good idea to set all the items in cookie
-            //!!!!! we should encrypt the cookie later with JWT
-            if (data['$metadata'].httpStatusCode && data['$metadata'].httpStatusCode === 200 && data.Item) {
-                res.cookie('club1', `${data.Item}`)// { httpOnly: true, secure: process.env.NEXT_PUBLIC_NODE_ENV !== 'dev', sameSite: 'strict', path: "/club" }
+                delete data.params;
+                data.Items = data.Items.map(item => unmarshall(item));
+            } else {
+                data = await Pipe(validateSchema(validateGet), generateParams_get, getCLub)(req.query)
+                if (data?.Item) {
+                    res.cookie('club1', `${data.Item}`)// { httpOnly: true, secure: process.env.NEXT_PUBLIC_NODE_ENV !== 'dev', sameSite: 'strict', path: "/club" }
+                    // data.Items = await data.Items.map(item => unmarshall(item))
+                    delete data.params;
+                }
             }
-            res.cookie('club2', `${data.Item}`)
+
         } else if (req.method === "PATCH") {
             data = await Pipe(validate(patchSchema), generateUpdateParam, updateClub)(req.body)
 
@@ -60,8 +59,13 @@ async function handler(req, res) {
         return res.status(200).json({ ...data })
         // return res.status(data['$metadata'].httpStatusCode).json({ ...data })
     } catch (error) {
-        console.log("error: ", error)
-        return res.status(404).json({ error: JSON.stringify(error.message) });
+        let errorResponse = await data;
+        if (req.method === "GET", error.message === "No value defined: {}") {
+            return res.status(404).json({ error: JSON.stringify(error.message + ". Club not found.") });
+        }
+
+        console.log("error: ", error, errorResponse)
+        return res.status(404).json({ error: JSON.stringify(error.message), data: errorResponse }); //have to find a way to sendd this errorResponse to api.
     }
 }
 
@@ -155,4 +159,41 @@ async function updateClub(body) {
         throw new Error("api/club Update update action response status != 200.\n" + updateResponse);
     }
     throw new Error("api/club UPdate action not found");
+}
+
+
+function createParams_getAll() {
+    var params = {
+        TableName: process.env.DB_CLUB_TABLENAME,
+        ProjectionExpression: "#clubID, #formID, #image, #purpose, #clubName",
+        FilterExpression: "#formID <> :empty and #formID <> :empty2",
+        ExpressionAttributeNames: {
+            "#formID": "formID",
+            "#image": "image",
+            "#purpose": "purpose",
+            "#clubName": "clubName",
+            "#clubID": "clubID"
+        },
+        ExpressionAttributeValues: {
+            ":empty": { S: "" },
+            ":empty2": { S: " " },
+        }
+    };
+    return params;
+}
+
+function generateParams_get(query) {
+    const params: GetItemCommandInput = {
+        TableName: process.env.DB_CLUB_TABLENAME,
+        Key: {
+            clubID: {
+                S: query.clubID
+            }
+        },
+    }
+    return { params, ...query };
+}
+
+function getCLub(query) {
+    return getItem(query.params)
 }
