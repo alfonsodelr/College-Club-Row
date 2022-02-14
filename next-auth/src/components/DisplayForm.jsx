@@ -1,5 +1,8 @@
 import { React, useState } from 'react'
 import { useSession } from "next-auth/react"
+import { useRouter } from 'next/router';
+import axios from 'axios';
+
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -11,13 +14,25 @@ import $ from './DisplayForm.module.scss'
 function DisplayForm({ tagArr }) {
     const { data: session, status } = useSession()
     const [userInput, setUserInput] = useState([...tagArr])
+    const { asPath } = useRouter();
+    const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
 
     const inputHandler = (value, index) => {
         setUserInput((userInput) => { userInput[index].values = value; return userInput; })
     }
 
-    const submithandler = () => {
-        console.log(userInput, "hi")
+    const submithandler = async () => {
+        try {
+            const formID = asPath.split('/').reverse()[0];
+            const clubID = asPath.split('/').reverse()[1];
+            const userID = session.userID;
+            const formResponse = await axios.post(baseUrl + "/api/form/userinput", { userID, formID, tags: userInput })
+            const clubResponse = await axios.patch(baseUrl + "/api/club", { clubID, key: 'members', value: userID, action: 'append_role' })
+
+            console.log(formResponse, userID)
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     if (status !== "authenticated") {

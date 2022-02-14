@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 
-export default function RadioButtonsGroup_Custom({ formLabel, li, deleteable = false, deleteModHandler = (e) => { }, inputHandler = (e = "") => { return false } }) {
+export default function RadioButtonsGroup_Custom({ formLabel, li = [], deleteable = false, deleteModHandler = (e) => { }, inputHandler = (e = "") => { return false } }) {
     const [value, setValue] = useState('');
     const handleUserInput = useMemo(() => inputHandler(), []);
     const handleChange = (e) => {

@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 
 
-function CheckboxGroup({ formLabel, li, deleteable = false, deleteModHandler = (e) => { }, inputHandler = (e = "") => { return false; } }) {
+function CheckboxGroup({ formLabel, li = [], deleteable = false, deleteModHandler = (e) => { }, inputHandler = (e = "") => { return false; } }) {
     const [checkBoxList, setCheckBoxList] = useState(li);
     const handleUserInput = useMemo(() => inputHandler(), []);
     const handleChange = (e, index) => {
