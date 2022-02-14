@@ -91,6 +91,12 @@ export default NextAuth({
         console.log(error)
         return token;
       }
+    },
+    async session({ session, token }) {
+
+      let tokens: any = token; //!!!!! fix 'any'
+      session.userID = tokens.profiles.userID;
+      return session
     }
   },
 
