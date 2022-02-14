@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -14,22 +14,42 @@ import $ from './DisplayForm.module.scss'
 function DisplayForm({ tagArr }) {
     const { data: session, status } = useSession()
     const [userInput, setUserInput] = useState([...tagArr])
-    const { asPath } = useRouter();
+    const [isMounted, setIsMounted] = useState(true)
+    const router = useRouter();
     const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
 
     const inputHandler = (value, index) => {
         setUserInput((userInput) => { userInput[index].values = value; return userInput; })
     }
 
+    useEffect(() => {
+        const controller = new AbortController();
+        return () => {
+            controller.abort();
+            setIsMounted(false)
+        }
+    }, [])
+
+
     const submithandler = async () => {
         try {
-            const formID = asPath.split('/').reverse()[0];
-            const clubID = asPath.split('/').reverse()[1];
-            const userID = session.userID;
-            const formResponse = await axios.post(baseUrl + "/api/form/userinput", { userID, formID, tags: userInput })
-            const clubResponse = await axios.patch(baseUrl + "/api/club", { clubID, key: 'members', value: userID, action: 'append_role' })
+            if (isMounted === true) {
+                const formID = router.asPath.split('/').reverse()[0];
+                const clubID = router.asPath.split('/').reverse()[1];
+                const userID = session.userID;
+                const formResponse = await axios.post(baseUrl + "/api/form/userinput", { userID, formID, tags: userInput })
+                const clubResponse = await axios.patch(baseUrl + "/api/club", { clubID, key: 'members', value: userID, action: 'append_role' })
+                    .catch(err => {
+                        if (err.response.status === 302) {
+                            console.log("status=302. form already exist")
+                        } else {
+                            console.log(err.response);
+                            throw `DisplayForm.submitHandler: ${err.response}`
+                        }
+                    }).then(res => {
 
-            console.log(formResponse, userID)
+                    })
+            }
         } catch (error) {
             console.log(error.message)
         }
@@ -40,7 +60,7 @@ function DisplayForm({ tagArr }) {
     }
     return (
         <>
-            <div className={$.flexContainer}>
+            <form onSubmit={submithandler} className={$.flexContainer}>
                 {
                     tagArr.map((tag, index) => {
                         if (tag.tagType === 'short-answer') {
@@ -59,14 +79,14 @@ function DisplayForm({ tagArr }) {
                         } else if (tag.tagType === 'multiple-choice') {
                             return (
                                 <div key={index} className={$.myltipleChoice}>
-                                    <RadioButtonsGroup_Custom inputHandler={(value) => { inputHandler(value, index) }} formLabel={tag.label} li={tag.values}></RadioButtonsGroup_Custom>
+                                    <RadioButtonsGroup_Custom inputHandler={(value) => { inputHandler(value, index) }} formLabel={tag.label} li={tag.values} required={tag.required}></RadioButtonsGroup_Custom>
                                 </div>
                             )
                         } else if (tag.tagType === 'check-box') {
                             return (
 
                                 <div key={index} className={$.checkBox}>
-                                    <CheckboxGroup inputHandler={(value) => { inputHandler(value, index) }} formLabel={tag.label} li={tag.values}></CheckboxGroup>
+                                    <CheckboxGroup inputHandler={(value) => { inputHandler(value, index) }} formLabel={tag.label} li={tag.values} required={tag.required}></CheckboxGroup>
                                 </div>
                             )
                         } else if (tag.tagType === 'file-upload') {
@@ -88,8 +108,8 @@ function DisplayForm({ tagArr }) {
                         }
                     })
                 }
-                <Button onClick={submithandler} variant='contained'>Submit</Button>
-            </div>
+                <Button type='submit' variant='contained'>Submit</Button>
+            </form>
         </>
     )
 }
