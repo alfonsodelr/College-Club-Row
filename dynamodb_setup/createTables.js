@@ -17,6 +17,7 @@ const ddbClient = new DynamoDBClient({
 //---to delete a table-----
 // deleteTable("CCR-club")
 // deleteTable("CCR-club-form")
+// deleteTable("CCR-user-form")
 // deleteTable("CCR-user")
 
 //// ---create all tables-----

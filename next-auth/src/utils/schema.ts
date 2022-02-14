@@ -156,14 +156,14 @@ const api_form_userinput_post_schema = {
     type: "object",
     properties: {
         userID: { type: "string" },
-        term: { type: "string" },
+        formID: { type: "string" },
         tags: {
             type: "array",
             items: { type: "object" },
             minItems: 1,
         },
     },
-    required: ["userID", "term", "tags"],
+    required: ["userID", "formID", "tags"],
 }
 
 
@@ -172,9 +172,9 @@ const api_form_userinput_get_schema = {
     type: "object",
     properties: {
         userID: { type: "string" },
-        term: { type: "string" },
+        formID: { type: "string" },
     },
-    required: ["userID", "term"],
+    required: ["userID", "formID"],
 }
 
 type sessionType = {

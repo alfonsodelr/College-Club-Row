@@ -65,7 +65,7 @@ const CCR_user_form_TableParams = {
             AttributeType: "S",
         },
         {
-            AttributeName: "term",
+            AttributeName: "formID",
             AttributeType: "S",
         },
     ],
@@ -75,7 +75,7 @@ const CCR_user_form_TableParams = {
             KeyType: "HASH",
         },
         {
-            AttributeName: "term",
+            AttributeName: "formID",
             KeyType: "RANGE",
         },
     ],
