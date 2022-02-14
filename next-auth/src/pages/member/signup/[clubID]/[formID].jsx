@@ -34,12 +34,8 @@ export async function getStaticPaths() {
 // This also gets called at build time
 export async function getStaticProps({ params }) {
 
-    // const res = await axios.get(`https://.../posts/${params.id}`)
-    // const post = await res.json()
     const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
     var clubForm = await axios.get(`${baseUrl}/api/form?clubID=${params.clubID}&formID=${params.formID}`)
-    // console.log(clubForm.data.Item.tags)
-    // Pass post data to the page via props
     return {
         props: { tagArr: clubForm.data.Item.tags },
         revalidate: 2 * 3600,

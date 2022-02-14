@@ -34,7 +34,6 @@ async function handler(req, res) {
         } else if (req.method === "GET") {
             if (req.query.clubID === 'all') {
                 data = await Pipe(createParams_getAll, scanTable)();
-                // console.log(data.header())
 
                 delete data.params;
                 data.Items = data.Items.map(item => unmarshall(item));
@@ -59,8 +58,8 @@ async function handler(req, res) {
         return res.status(200).json({ ...data })
         // return res.status(data['$metadata'].httpStatusCode).json({ ...data })
     } catch (error) {
-        let err = errorHandler(req, error);
-        return res.status(404).json({ error: err });
+        let err: any = errorHandler(req, error);
+        return res.status(err?.status !== undefined ? err.status : 404).json({ error: err });
     }
 }
 

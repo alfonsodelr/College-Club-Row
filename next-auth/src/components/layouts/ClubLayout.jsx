@@ -38,12 +38,13 @@ const ClubLayout = ({ clubInfo = undefined, title = "", children, }) => {
                 setClubCookie(JSON.parse(Cookies.get('club')));
             } else {
                 router.push('/club')
-                return;
             }
         }
-        return;
+        return () => {
+            setClubCookie({})
+        };
     }, []);
-    console.log(typeof clubCookie)
+
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);

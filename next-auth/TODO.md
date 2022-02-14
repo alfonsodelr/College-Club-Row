@@ -40,3 +40,4 @@ start: 10:43 pm 1/28
 3. officers who has role in more that one club, should be given which club to sign in as.
 4. DisplayForm() component checkBox and multipleChoice element should have full width.
 5. Dynamodb ScanTable() pagination for scan club and clubForm.
+6. change RadioButtonsGroup_Custom and CheckboxGroup to request whole tag item to reduce the component params

@@ -139,7 +139,7 @@ const MemberLayout = ({ clubInfo = undefined, title = "", children, }) => {
                                         signOut({ callbackUrl: `${baseUrl}/member/clubs` })
                                     }}
                                 >
-                                    <Button color="inherit">Signout</Button>
+                                    <Button color="inherit">Sign out</Button>
                                 </a>
                             </>
                         )}

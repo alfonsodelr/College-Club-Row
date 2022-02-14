@@ -1,19 +1,10 @@
 import React from 'react'
 import $ from './WaveHeader.module.scss'
-import { signIn, signOut, useSession } from "next-auth/react"
-import { useEffect, useState } from 'react'
 import Head from 'next/head'
 // ///mui import 
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/MenuSharp';
 
 export default function Wave({ headerTitle = "" }) {
-  const { data: session, status } = useSession()
 
   return (
     <div>

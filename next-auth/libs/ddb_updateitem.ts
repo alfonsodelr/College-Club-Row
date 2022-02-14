@@ -23,7 +23,7 @@ const updateItem = async (params: UpdateItemCommandInput) => {
         console.log("Success - item added or updated", data);
         return { ...data, params };
     } catch (error) {
-        console.log("Error", error);
+        console.log("ddb_updateitem: ", error.message);
         return { error, params }
     }
 };

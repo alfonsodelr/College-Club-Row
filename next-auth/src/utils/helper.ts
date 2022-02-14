@@ -161,8 +161,8 @@ function errorHandler(req, error) {
         return (req.url + " " + req.method + ": " + error.message + " Not Found.")
     }
 
-    if (error.message.includes("ConditionalCheckFailedException")) {
-        return (req.url + " " + req.method + ": " + error.message + " Not Found.")
+    if (req.url === "/api/club" && req.method === "PATCH" && error.message.includes("ConditionalCheckFailedException")) {
+        return { error: req.url + " " + req.method + "condition failed" + ": " + error.message + " Not Found.", status: 302 }
     }
 
 
