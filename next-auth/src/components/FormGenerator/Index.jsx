@@ -18,11 +18,13 @@ function Index() {
     const requiredRef = useRef()
     const descriptionRef = useRef();
     const [tagArr, setTagArr] = useState([])
+    const [isMounted, setIsMounted] = useState(true)
     const [tagType, setTagType] = useState('short-answer');
     const [clubCookies, setClubCookies] = useState('');
     const [hotDisplayArr, setHotDisplayArr] = useState([]);
     const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
     const router = useRouter();
+
     useEffect(() => {
         let clubCookie = Cookies.get('club');
         if (clubCookie === undefined) {
@@ -30,7 +32,12 @@ function Index() {
         } else {
             setClubCookies(JSON.parse(clubCookie))
         }
-        return;
+        const controller = new AbortController();
+        return () => {
+            controller.abort();
+            setIsMounted(false)
+        }
+
     }, []);
 
     useEffect(() => {
@@ -39,11 +46,17 @@ function Index() {
         requiredRef.current.checked = "false"
         descriptionRef.current.value = '';
         return () => {
-        }
+            setLabelText('');
+            descriptionRef.current.value = '';
+        };
     }, [tagArr])
 
     useEffect(() => {
         setHotDisplayArr([])
+
+        return () => {
+            setHotDisplayArr([])
+        };
     }, [tagType]);
 
 
@@ -70,10 +83,12 @@ function Index() {
     const generateFormHandler = async () => {
         if (tagArr.length === 0) { console.log("Must have at least one tag."); return }
         try {
-            const formID = genereateID('formID');
-            const formRes = await axios.post(baseUrl + "/api/form/", { clubID: clubCookies.id, formID, tags: tagArr })
-            const clubRes = await axios.patch(baseUrl + "/api/club/", { clubID: clubCookies.id, key: 'formID', value: formID, action: 'update' })
-            router.push(`/club/${urlCleaner(clubCookies.name)}`)
+            if (isMounted) {
+                const formID = genereateID('formID');
+                const formRes = await axios.post(baseUrl + "/api/form/", { clubID: clubCookies.id, formID, tags: tagArr })
+                const clubRes = await axios.patch(baseUrl + "/api/club/", { clubID: clubCookies.id, key: 'formID', value: formID, action: 'update' })
+                router.push(`/club/${urlCleaner(clubCookies.name)}`)
+            }
         } catch (error) {
             console.log("error: ", error.message)
         }

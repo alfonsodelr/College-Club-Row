@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import TextField from '@mui/material/TextField';
 import $ from "./index.module.scss"
 import Toolbar from '@mui/material/Toolbar';
@@ -7,37 +7,35 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 function index() {
+    const [isMounted, setIsMounted] = useState(true)
     const router = useRouter()
     const clubNameRef = useRef("");
     const clubIDRef = useRef("");
     const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_RUL;
 
     useEffect(() => {
-        // Prefetch the dashboard page
-        router.prefetch('dashboard')
+        const controller = new AbortController();
+        return () => {
+            controller.abort();
+            setIsMounted(false)
+        }
     }, [])
 
+
     const generateClubHandler = async () => {
-        const clubName = clubNameRef.current.value;
-        const clubID = clubIDRef.current.value;
-        const res = await axios.get(baseUrl + "/api/club/", { params: { clubID } })
+        if (isMounted) {
+            const clubName = clubNameRef.current.value;
+            const clubID = clubIDRef.current.value;
+            const res = await axios.get(baseUrl + "/api/club/", { params: { clubID } })
 
-        if (!res.data.Item) {
-            console.log("clubID not found");
-            return;
+            if (!res.data.Item) {
+                console.log("clubID not found");
+                return;
+            }
+
+            console.log(res.data.Item)
+            router.push('dashboard')
         }
-
-        console.log(res.data.Item)
-
-        // console.log(clubID)
-        // console.log(res);
-        //TODO: 
-        //1.checks for club access code
-        //2.redirects to club dashboard if credential are correct
-        //for a better push example: https://nextjs.org/docs/api-reference/next/router#usage-2
-        ///
-
-        router.push('dashboard')
 
     }
     return <div className={$.container} >
