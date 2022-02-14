@@ -157,6 +157,14 @@ function errorHandler(req, error) {
         return (req.url + " " + req.method + ": " + error.message)
     }
 
+    if (req.method === "GET", error.message === "No value defined: {}") {
+        return (req.url + " " + req.method + ": " + error.message + " Not Found.")
+    }
+
+    if (error.message.includes("ConditionalCheckFailedException")) {
+        return (req.url + " " + req.method + ": " + error.message + " Not Found.")
+    }
+
 
     return ("unexpected_error: " + req.url + " " + req.method + ": " + error.message)
 }

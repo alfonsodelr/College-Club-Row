@@ -6,7 +6,7 @@ import { GetItemCommandInput, PutItemCommandInput, UpdateItemCommandInput, ScanC
 import { ajv } from "../../../utils/validation"
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ValidateFunction } from "ajv";
-import { Pipe, Tap, validateRole, validateSchema } from "../../../utils/helper";
+import { errorHandler, Pipe, Tap, validateRole, validateSchema } from "../../../utils/helper";
 import cookies from "../../../utils/cookies.js"
 import { scanTable } from "../../../../libs/ddb_scantable"
 const validatePost = ajv.getSchema("api_club_post_schema");
@@ -59,13 +59,8 @@ async function handler(req, res) {
         return res.status(200).json({ ...data })
         // return res.status(data['$metadata'].httpStatusCode).json({ ...data })
     } catch (error) {
-        let errorResponse = await data;
-        if (req.method === "GET", error.message === "No value defined: {}") {
-            return res.status(404).json({ error: JSON.stringify(error.message + ". Club not found.") });
-        }
-
-        console.log("error: ", error, errorResponse)
-        return res.status(404).json({ error: JSON.stringify(error.message), data: errorResponse }); //have to find a way to sendd this errorResponse to api.
+        let err = errorHandler(req, error);
+        return res.status(404).json({ error: err });
     }
 }
 
@@ -87,6 +82,7 @@ function generateUpdateParam(body) {
                 clubID: { S: body.clubID },
             },
             UpdateExpression: `SET #key = list_append(#key, :i)`,
+            ConditionExpression: "attribute_not_exists(#key) OR NOT contains(#key, :ii)",
             ExpressionAttributeNames: { "#key": `${dataKey}` },
             ExpressionAttributeValues: {
                 ":i": {
@@ -94,6 +90,9 @@ function generateUpdateParam(body) {
                         { "S": `${dataValue}` },
                     ]
                 },
+                ":ii": {
+                    "S": `${dataValue}`
+                }
             },
             ReturnValues: "ALL_NEW"
         };
@@ -141,13 +140,21 @@ function generateUpdateParam(body) {
 async function updateClub(body) {
     if (body.action === "append_role") {
         var clubResponse = await updateItem(body.club_params);
+        if (clubResponse.error !== undefined) {
+            throw Error("api/club Update append_role action clubResponse error: " + clubResponse.error);
+        }
+
         var userResponse = await updateItem(body.user_params);
+        if (userResponse.error !== undefined) {
+            throw Error("api/club Update append_role action userResponse error: " + userResponse.error);
+        }
+
         if (clubResponse['$metadata']?.httpStatusCode === 200 && userResponse['$metadata']?.httpStatusCode === 200) {
             delete body.club_params;
             delete body.user_params;
             return { ...body, clubResponse: clubResponse['$metadata'], userResponse: userResponse['$metadata'] }
         }
-        throw new Error("api/club Update append_role action response status != 200.\n" + clubResponse + userResponse);
+        throw new Error("api/club Update append_role action response status != 200.\n" + clubResponse.error + userResponse.error);
 
     } else if (body.action === "update") {
         var updateResponse = await updateItem(body.params);

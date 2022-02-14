@@ -51,7 +51,11 @@ function createPostParams(body) {
     return { ...body, params }
 }
 
-function postUserInput(body) { return putItem(body.params) }
+async function postUserInput(body) {
+    var dbResponse = await putItem(body.params)
+    delete dbResponse.params;
+    return { ...dbResponse }
+}
 
 function createGetParams(query) {
     const params: GetItemCommandInput = {
